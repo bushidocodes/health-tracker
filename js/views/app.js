@@ -9,6 +9,7 @@ var app = app || {};
 app.AppView = Backbone.View.extend({
     initialize: function () {
         new app.InputFoodCardView();
+        new app.DailyTotalsCardView();
         // cache DOM calls
         this.dailyTotalsCard = $('#dailyTotalsCard');
         this.foodLogCard = $('#foodLogCard');
