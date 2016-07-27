@@ -4,16 +4,19 @@ var app = app || {};
 app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
     events: {
-        'keypress #inputFood': 'typeahead'
+        'keyup #inputFood': 'typeahead',
+        'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
         this.$input = $('#inputFood');
      },
-    render: function () { },
+    // render: function () { },
     typeahead: function (e) {
-        console.log("typing detected");
-        if (e.which === ENTER_KEY) {
-            this.createOnEnter(e);
+        console.log("typeahead running");
+        // console.log(this.$input.val().trim().length);
+        if (e.which === ENTER_KEY && this.$input.val().trim()) {
+            // console.log("calling CreateFoodItem");
+            this.createFoodItem(e);
         } else {
             $.get('data/example_collection.json', function (data) {
                 $("#inputFood").typeahead({
@@ -32,15 +35,16 @@ app.InputFoodCardView = Backbone.View.extend({
         };
     },
 
-    createOnEnter: function (event) {
-
-        // if event wasn't triggered by the enter key or if the input field is empty, return out of the function
-        console.log(this.$input.val().trim());
-        if (event.which !== ENTER_KEY || !this.$input.val().trim()) {
+    createFoodItem: function (event) {
+        // console.log("createFoodItem running");
+                // if event wasn't triggered by the enter key or if the input field is empty, return out of the function
+        // console.log(this.$input.val().trim());
+        if (!this.$input.val().trim()) {
             return;
         }
 
         // create a new todo
+        // console.log(this.newAttributes());
         app.foodItems.create(this.newAttributes());
 
         // erase the input field

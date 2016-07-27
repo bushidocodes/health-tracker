@@ -20,7 +20,7 @@
                 <div class="card card-block" id="inputFoodCard">
                     <form>
                         <fieldset class="form-group">
-                            <label for="inputFood">What did you eat?</label>
+                            <label type="label" for="inputFood">What did you eat?</label>
                             <input type="text" class="form-control" id="inputFood" placeholder="" autocomplete="off">
                         </fieldset>
                         <fieldset class="form-group">
@@ -30,16 +30,16 @@
                         <fieldset class="form-group">
                             <label for="inputTime">Example select</label>
                             <select class="form-control" id="inputTime">
-                            <option>Breakfast</option>
-                            <option>Morning Snack</option>
-                            <option>Lunch</option>
-                            <option>Afternoon Snack</option>
-                            <option>Dinner</option>
-                            <option>After Dinner</option>
-   	                    </select>
+                                <option>Breakfast</option>
+                                <option>Morning Snack</option>
+                                <option>Lunch</option>
+                                <option>Afternoon Snack</option>
+                                <option>Dinner</option>
+                                <option>After Dinner</option>
+   	                        </select>
                         </fieldset>
                         <!-- Overridding Button Type to Prevent Page Loads-->
-                        <button type="button" class="btn btn-primary">Submit</button>
+                        <button type="button" class="btn btn-primary" id="inputFoodSubmit">Submit</button>
                     </form>
                 </div>
             </div>
@@ -49,7 +49,7 @@
                 <div class="card card-block" id="dailyTotalsCard" style="display: none">
                     <h1>Daily Totals</h1>
                     <h3>Calories: <span id="numCals"></span></h3>
-                    <h3>Fat:</h3>
+                    <!--<h3>Fat:</h3>-->
                 </div>
             </div>
         </div>
@@ -61,18 +61,18 @@
                         <thead>
                             <tr>
                                 <!--<th>#</th>-->
-                                <th>Meal</th>
+                                <!--<th>Meal</th>-->
                                 <th>Food</th>
-                                <th>Amount</th>
+                                <!--<th>Amount</th>-->
                                 <th>Calories</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
                                 <!--<th scope="row">1</th>-->
-                                <td>Breakfast</td>
+                                <!--<td>Breakfast</td>-->
                                 <td>Slim Jim</td>
-                                <td>1</td>
+                                <!--<td>1</td>-->
                                 <td>800</td>
                             </tr>
                         </tbody>
@@ -90,10 +90,10 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.16/backbone.localStorage-min.js"></script>
     <script src="js/models/foodItem.js"></script>
     <script src="js/collections/foodItems.js"></script>
-    <script src="js/views/foodItems.js"></script>
-    <script src="js/views/app.js"></script>>
+    <script src="js/views/app.js"></script>
     <script src="js/views/inputFoodCardView.js"></script>
     <script src="js/views/dailyTotalsCardView.js"></script>
+    <script src="js/views/foodLogCardView.js"></script>
     <script src="js/routers/router.js"></script>
     <script src="js/app.js"></script>
 </body>

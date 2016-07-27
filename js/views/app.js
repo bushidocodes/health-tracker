@@ -10,6 +10,7 @@ app.AppView = Backbone.View.extend({
     initialize: function () {
         new app.InputFoodCardView();
         new app.DailyTotalsCardView();
+        new app.FoodLogCardView();
         // cache DOM calls
         this.dailyTotalsCard = $('#dailyTotalsCard');
         this.foodLogCard = $('#foodLogCard');
@@ -17,9 +18,6 @@ app.AppView = Backbone.View.extend({
 
         // configure listeners
         this.listenTo(app.foodItems, ' add ', this.render);
-
-
-        new app.InputFoodCardView();
     },
     render: function () {
         console.log("rendering");
