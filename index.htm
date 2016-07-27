@@ -62,7 +62,9 @@
                             <tr>
                                 <!--<th>#</th>-->
                                 <!--<th>Meal</th>-->
+                                <th>Meal</th>
                                 <th>Food</th>
+                                <th>Amount</th>
                                 <!--<th>Amount</th>-->
                                 <th>Calories</th>
                             </tr>
@@ -85,7 +87,9 @@
 
     <!--Underscore Micro-templates-->
     <script type="text/template" id="foodLogItem-template">
+            <td><%= time %></td>
             <td><%= name %></td>
+            <td><%= amount %></td>
             <td><%= calories %></td>
     </script>
 

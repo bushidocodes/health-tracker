@@ -8,7 +8,9 @@ app.InputFoodCardView = Backbone.View.extend({
         'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
-        this.$input = $('#inputFood');
+        this.$inputFood = $('#inputFood');
+        this.$inputAmount = $('#inputAmount');
+        this.$inputTime = $('#inputTime');
         $.get('data/example_collection.json', function (data) {
             $('#InputFood').blur()
             $('#inputFood').typeahead({
@@ -32,7 +34,9 @@ app.InputFoodCardView = Backbone.View.extend({
     // grab the string in the input field and return as object to be passed into foodItem constructor
     newAttributes: function () {
         return {
-            name: this.$input.val().trim(),
+            name: this.$inputFood.val().trim(),
+            amount: this.$inputAmount.val().trim(),
+            time: this.$inputTime.val().trim(),
             calories: 100
         };
     },
@@ -41,7 +45,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // console.log("createFoodItem running");
         // if event wasn't triggered by the enter key or if the input field is empty, return out of the function
         // console.log(this.$input.val().trim());
-        if (!this.$input.val().trim()) {
+        if (!this.$inputFood.val().trim() || !this.$inputAmount.val().trim()) {
             return;
         }
 
@@ -50,7 +54,9 @@ app.InputFoodCardView = Backbone.View.extend({
         app.foodItems.create(this.newAttributes());
 
         // erase the input field
-        this.$input.val('');
+        this.$inputFood.val('');
+        this.$inputAmount.val('');
+        this.$inputTime.val( "Breakfast" );
     },
 
 });
