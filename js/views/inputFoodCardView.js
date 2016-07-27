@@ -4,26 +4,28 @@ var app = app || {};
 app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
     events: {
-        'keyup #inputFood': 'typeahead',
+        'keyup #inputFood': 'createOnEnter',
         'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
         this.$input = $('#inputFood');
-     },
+        $.get('data/example_collection.json', function (data) {
+            $('#InputFood').blur()
+            $('#inputFood').typeahead({
+                source: data,
+                minLength: 1
+            });
+        }, 'json');
+    },
     // render: function () { },
-    typeahead: function (e) {
+    createOnEnter: function (e) {
         console.log("typeahead running");
         // console.log(this.$input.val().trim().length);
         if (e.which === ENTER_KEY && this.$input.val().trim()) {
             // console.log("calling CreateFoodItem");
             this.createFoodItem(e);
         } else {
-            $.get('data/example_collection.json', function (data) {
-                $("#inputFood").typeahead({
-                    source: data,
-                    minLength: 1
-                });
-            }, 'json');
+
         }
     },
 
@@ -37,7 +39,7 @@ app.InputFoodCardView = Backbone.View.extend({
 
     createFoodItem: function (event) {
         // console.log("createFoodItem running");
-                // if event wasn't triggered by the enter key or if the input field is empty, return out of the function
+        // if event wasn't triggered by the enter key or if the input field is empty, return out of the function
         // console.log(this.$input.val().trim());
         if (!this.$input.val().trim()) {
             return;
