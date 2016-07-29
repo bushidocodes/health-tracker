@@ -13,8 +13,42 @@ app.FoodLogCardView = Backbone.View.extend({
     },
     addItem: function (foodItem) {
         var view = new app.FoodLogItemView({ model: foodItem });
-        console.log(view.render().el);
-        $('#foodLogCardTable tbody').append(view.render().el);
+        var preRendered = view.render().el;
+        console.log(preRendered);
+        // console.log(JSON.stringify(foodItem));
+        // console.log(JSON.stringify(foodItem.get(time"));
+        switch (foodItem.get('time')) {
+            case 'Breakfast':
+                $('#breakfastTable').show();
+                $('#breakfastTableBody').append(preRendered);
+                break;
+            case 'Morning Snack':
+                $('#morningSnackTable').show();
+                $('#morningSnackTableBody').append(preRendered);
+                break;
+            case 'Lunch':
+                $('#lunchTable').show();
+                $('#lunchTableBody').append(preRendered);
+                break;
+            case 'Afternoon Snack':
+                $('#afternoonSnackTable').show();
+                $('#afternoonSnackTableBody').append(preRendered);
+                break;
+            case 'Dinner':
+                $('#dinnerTable').show();
+                $('#dinnerTableBody').append(preRendered);
+                break;
+            case 'After Dinner':
+                $('#afterDinnerTable').show();
+                $('#afterDinnerTableBody').append(preRendered);
+                break;
+        };
+
+        // $('#oldSchoolTable tbody').append(preRendered);
+
+
+
+
     },
     // render: function () { },
 });
