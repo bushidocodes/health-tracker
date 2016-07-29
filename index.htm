@@ -57,27 +57,97 @@
             <div class="col-sm-12">
                 <div class="card card-block" id="foodLogCard" style="display: none">
                     <h1>Food Log</h1>
-                    <table class="table" id="foodLogCardTable">
-                        <thead>
-                            <tr>
-                                <!--<th>#</th>-->
-                                <!--<th>Meal</th>-->
-                                <th>Meal</th>
-                                <th>Food</th>
-                                <th>Amount</th>
-                                <!--<th>Amount</th>-->
-                                <th>Calories</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!--<tr>-->
-                                <!--<th scope="row">1</th>-->
-                                <!--<td>Breakfast</td>-->
-                                <!--<td>Slim Jim</td>-->
-                                <!--<td>1</td>-->
-                                <!--<td>800</td>-->
-                            <!--</tr>-->
-                        </tbody>
+                    <!--<section id="breakfastTable">-->
+                    <section id="breakfastTable" style="display: none">
+                        <h3>Breakfast</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Amount</th>
+                                    <th>Calories</th>
+                                </tr>
+                            </thead>
+                            <tbody id="breakfastTableBody">
+                            </tbody>
+                        </table>
+                    </section>
+                    <section id="morningSnackTable" style="display: none">
+                        <!--<section id="morningSnackTable">-->
+                        <h3>Morning Snack</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Amount</th>
+                                    <th>Calories</th>
+                                </tr>
+                            </thead>
+                            <tbody id="morningSnackTableBody">
+                            </tbody>
+                        </table>
+                    </section>
+                    <section id="lunchTable" style="display: none">
+                        <!--<section id="lunchTable">-->
+                        <h3>Lunch</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Amount</th>
+                                    <th>Calories</th>
+                                </tr>
+                            </thead>
+                            <tbody id="lunchTableBody">
+                            </tbody>
+                        </table>
+                    </section>
+                    <section id="afternoonSnackTable" style="display: none">
+                        <!--<section id="afternoonSnackTable">-->
+                        <h3>Afternoon Snack</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Amount</th>
+                                    <th>Calories</th>
+                                </tr>
+                            </thead>
+                            <tbody id="afternoonSnackTableBody">
+                            </tbody>
+                        </table>
+                    </section>
+                    <section id="dinnerTable" style="display: none">
+                        <!--<section id="dinnerTable">-->
+                        <h3>Dinner</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>Amount</th>
+                                    <th>Calories</th>
+                                </tr>
+                            </thead>
+                            <tbody id="dinnerTableBody">
+                            </tbody>
+                        </table>
+                    </section>
+                    <section id="afterDinnerTable" style="display: none">
+                        <!--<section id="afterDinnerTable">-->
+                        <h3>After Dinner</h3>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Food</th>
+                                    <th>#</th>
+                                    <th>Cals</th>
+                                </tr>
+                            </thead>
+                            <tbody id="afterDinnerTableBody">
+                            </tbody>
+                        </table>
+                    </section>
+                    </tbody>
                     </table>
                 </div>
             </div>
@@ -86,9 +156,9 @@
 
 
     <!--Underscore Micro-templates-->
-    <script type="text/template" id="foodLogItem-template">
-            <td><%= time %></td>
-            <td><%= name %></td>
+    <script type="text/template" id="foodLogItemTemplate">
+            <!--<td><%= time %></td>-->
+            <td><%= brandName %> <%= itemName %></td>
             <td><%= amount %></td>
             <td><%= calories %></td>
     </script>
@@ -97,7 +167,7 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.3/js/tether.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.2/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone-localstorage.js/1.1.16/backbone.localStorage-min.js"></script>

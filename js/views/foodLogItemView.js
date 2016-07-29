@@ -6,7 +6,7 @@ app.FoodLogItemView = Backbone.View.extend({
     tagName: 'tr',
 
     // use the item-template Underscore microtemplate to render as HTML
-    template: _.template($('#foodLogItem-template').html()),
+    template: _.template($('#foodLogItemTemplate').html()),
 
     // When initialized, being listening to the associated model and rerun reder when a change is detected
     initialize: function () {
