@@ -1,8 +1,8 @@
 // Declare app if not declared
 var app = app || {};
 
-app.nutritionixBuffer = [];
-app.engine;
+// app.nutritionixBuffer = [];
+// app.engine;
 
 app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
@@ -15,30 +15,49 @@ app.InputFoodCardView = Backbone.View.extend({
         this.$inputAmount = $('#inputAmount');
         this.$inputTime = $('#inputTime');
 
-        // app.engine = new Bloodhound({
-        //     local: ['dog', 'pig', 'moose'],
-        //     queryTokenizer: Bloodhound.tokenizers.whitespace,
-        //     datumTokenizer: Bloodhound.tokenizers.whitespace
-        // });
+        // References:
+        // http://stackoverflow.com/questions/24560108/typeahead-v0-10-2-bloodhound-working-with-nested-json-objects
 
+        var foodItems = new Bloodhound({
+            datumTokenizer: function (datum) {
+                return Bloodhound.tokenizers.whitespace(datum.brand_name)
+            },
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: 'https://api.nutritionix.com/v1_1/search/$%QUERY?results=0:20&fields=*&appId=aa511326&appKey=599102964bee7e4e92c3f8a9b4bfcdd4',
+                wildcard: '%QUERY',
+                filter: function (response) {
+                    return $.map(response.hits, function (hit) {
+                        return {
+                            brand_name: hit.fields.brand_name,
+                            item_name: hit.fields.item_name,
+                            nf_serving_size_unit: hit.fields.nf_serving_size_unit,
+                            nf_serving_size_qty: hit.fields.nf_serving_size_qty
+                        };
+                    });
+                }
+            }
+        });
 
-
-
-        // $('#inputFood').typeahead({
-        //     source: app.nutritionixBuffer,
-        //     minLength: 1
-        // });
-        // $.get('data/example_collection.json', function (data) {
-        //     $('#InputFood').blur()
-        //     $('#inputFood').typeahead({
-        //         source: data,
-        //         minLength: 1
-        //     });
-        // }, 'json');
+        $('#inputFood').typeahead(null, {
+            name: 'food-items',
+            display: 'value',
+            source: foodItems,
+            templates: {
+                empty: [
+                    '<div class="empty-message">',
+                    'unable to find any Best Picture winners that match the current query',
+                    '</div>'
+                ].join('\n'),
+                suggestion: function(data) { //suggestion engine passes results to data
+                    return '<div><strong>' + data.brand_name + ' ' + data.item_name + '</strong> – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit + '</div>'
+                }
+            }
+        });
     },
     // render: function () { },
     createOnEnter: function (e) {
-        app.nutritionixBuffer = this.searchNutritionix($('#inputFood').val());
+        // app.nutritionixBuffer = this.searchNutritionix($('#inputFood').val());
         console.log(app.nutritionixBuffer);
         if (e.which === ENTER_KEY && this.$input.val().trim()) {
             // console.log("calling CreateFoodItem");
@@ -75,21 +94,4 @@ app.InputFoodCardView = Backbone.View.extend({
         this.$inputAmount.val('');
         this.$inputTime.val("Breakfast");
     },
-
-    searchNutritionix: function (query) {
-        var results = [];
-        $.getJSON("https://api.nutritionix.com/v1_1/search/" + query + "?results=0:20&fields=item_name,brand_name,item_id,nf_calories&appId=aa511326&appKey=599102964bee7e4e92c3f8a9b4bfcdd4", function (data) {
-
-            // console.log(data.hits);
-            _.each(data.hits, function (hit) {
-                // console.log(hit.fields.brand_name + " " + hit.fields.item_name);
-                // this.name = this.fields.brand_name + " " + this.fields.item_name;
-                // console.log(this.name);
-                results.push(hit.fields.brand_name + " " + hit.fields.item_name);
-            });
-            // return data;
-        });
-        // console.log(results);
-        return results;
-    }
 });
