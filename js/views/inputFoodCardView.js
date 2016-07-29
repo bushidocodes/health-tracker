@@ -61,7 +61,7 @@ app.InputFoodCardView = Backbone.View.extend({
     createOnEnter: function (e) {
         // app.nutritionixBuffer = this.searchNutritionix($('#inputFood').val());
         console.log(app.nutritionixBuffer);
-        if (e.which === ENTER_KEY && this.$input.val().trim()) {
+        if (e.which === ENTER_KEY && this.$inputFood.val().trim()) {
             // console.log("calling CreateFoodItem");
             this.createFoodItem(e);
         } else {
