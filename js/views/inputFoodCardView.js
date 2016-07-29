@@ -41,7 +41,9 @@ app.InputFoodCardView = Backbone.View.extend({
 
         $('#inputFood').typeahead(null, {
             name: 'food-items',
-            display: 'value',
+            displayKey: function(data) {
+                return data.brand_name + ' ' + data.item_name + ' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit;
+            },
             source: foodItems,
             templates: {
                 empty: [
