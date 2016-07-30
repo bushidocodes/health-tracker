@@ -1,7 +1,7 @@
 // Declare app if not declared
 var app = app || {};
 
-// Food Item Model
+// The Food Item Model represents one or more identical food items consumed during a single meal on the current day.
 
 app.FoodItem = Backbone.Model.extend({
     defaults:{

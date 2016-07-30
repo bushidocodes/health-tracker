@@ -49,7 +49,6 @@
                 <div class="card card-block" id="dailyTotalsCard" style="display: none">
                     <h1>Daily Totals</h1>
                     <h3>Calories: <span id="numCals"></span></h3>
-                    <!--<h3>Fat:</h3>-->
                 </div>
             </div>
         </div>
@@ -57,7 +56,8 @@
             <div class="col-sm-12">
                 <div class="card card-block" id="foodLogCard" style="display: none">
                     <h1>Food Log</h1>
-                    <!--<section id="breakfastTable">-->
+                    <!--TODO: Create an Underscore Microtemplate for a generalized table and have foodLogCardView generate these tables-->
+                    <!--The acceptable values for these meals should probably be declared as an array in app.js-->
                     <section id="breakfastTable" style="display: none">
                         <h3>Breakfast</h3>
                         <table class="table">
@@ -73,7 +73,6 @@
                         </table>
                     </section>
                     <section id="morningSnackTable" style="display: none">
-                        <!--<section id="morningSnackTable">-->
                         <h3>Morning Snack</h3>
                         <table class="table">
                             <thead>
@@ -88,7 +87,6 @@
                         </table>
                     </section>
                     <section id="lunchTable" style="display: none">
-                        <!--<section id="lunchTable">-->
                         <h3>Lunch</h3>
                         <table class="table">
                             <thead>
@@ -103,7 +101,6 @@
                         </table>
                     </section>
                     <section id="afternoonSnackTable" style="display: none">
-                        <!--<section id="afternoonSnackTable">-->
                         <h3>Afternoon Snack</h3>
                         <table class="table">
                             <thead>
@@ -118,7 +115,6 @@
                         </table>
                     </section>
                     <section id="dinnerTable" style="display: none">
-                        <!--<section id="dinnerTable">-->
                         <h3>Dinner</h3>
                         <table class="table">
                             <thead>
@@ -133,7 +129,6 @@
                         </table>
                     </section>
                     <section id="afterDinnerTable" style="display: none">
-                        <!--<section id="afterDinnerTable">-->
                         <h3>After Dinner</h3>
                         <table class="table">
                             <thead>
@@ -157,7 +152,6 @@
 
     <!--Underscore Micro-templates-->
     <script type="text/template" id="foodLogItemTemplate">
-            <!--<td><%= time %></td>-->
             <td><%= brandName %> <%= itemName %></td>
             <td><%= amount %></td>
             <td><%= calories %></td>

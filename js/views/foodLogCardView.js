@@ -9,14 +9,16 @@ app.FoodLogCardView = Backbone.View.extend({
     },
     initialize: function () {
         // this.$input = $('#inputFood');
+
+        //TODO: Ensure that this is able to handle the reload of an existing collection from persistant storage.
         this.listenTo(app.foodItems, 'add', this.addItem);
     },
+    // addItem(foodItem) creates a FoodLogItemView subview (an table row <tr>), renders it as HTML, and appends it to the appropriate table for the selected meal.
+    // Because the meal tables are hidden upon initial pageload, show() is called to ensure they are visible.
+    // TODO: The show() implementation below is causing to many unneccesary jQuery selections. Create variable that keeps track of state without accessing the DOM.
     addItem: function (foodItem) {
         var view = new app.FoodLogItemView({ model: foodItem });
         var preRendered = view.render().el;
-        console.log(preRendered);
-        // console.log(JSON.stringify(foodItem));
-        // console.log(JSON.stringify(foodItem.get(time"));
         switch (foodItem.get('time')) {
             case 'Breakfast':
                 $('#breakfastTable').show();
@@ -44,11 +46,5 @@ app.FoodLogCardView = Backbone.View.extend({
                 break;
         };
 
-        // $('#oldSchoolTable tbody').append(preRendered);
-
-
-
-
-    },
-    // render: function () { },
+    }
 });

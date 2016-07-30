@@ -1,19 +1,21 @@
 // Declare app if not declared
 var app = app || {};
 
+// DailyTotalsCardView is a view that displays aggregate data for the day.
+// Currently, this only only shows calories
+// I hope to enhance this view to show data visualizations (at minimum bootstrap progress bars) of calories consumed versus recommended daily totals
+
 app.DailyTotalsCardView = Backbone.View.extend({
     el: '#dailyTotalsCard',
     initialize: function () {
         this.listenTo(app.foodItems, ' add ', this.render);
     },
+    // TODO: Ensure that this running total is able to load data from persistant storage. As is, t probably would reset to zero on page load.
     render: function () {
         var totalCals = 0;
         app.foodItems.each(function (foodItem) {
-            console.log(foodItem);
-            console.log(foodItem.get("calories"));
             totalCals = totalCals + foodItem.get("calories");
         });
-        console.log(totalCals);
         $('#numCals').text(totalCals);
     }
 });
