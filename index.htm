@@ -16,6 +16,8 @@
             <div class="col-sm-12">
                 <h1 class="text-xs-center">Health Tracker</h1>
             </div>
+        </div>
+        <div class="row">
             <div class="col-sm-12">
                 <div class="card card-block" id="inputFoodCard">
                     <form>
@@ -30,12 +32,7 @@
                         <fieldset class="form-group">
                             <label for="inputTime">Example select</label>
                             <select class="form-control" id="inputTime">
-                                <option>Breakfast</option>
-                                <option>Morning Snack</option>
-                                <option>Lunch</option>
-                                <option>Afternoon Snack</option>
-                                <option>Dinner</option>
-                                <option>After Dinner</option>
+                                <!-- Times defined in MEAL_TIMES are dynamically added here-->
    	                        </select>
                         </fieldset>
                         <!-- Overridding Button Type to Prevent Page Loads-->
@@ -44,6 +41,7 @@
                 </div>
             </div>
         </div>
+
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-block" id="dailyTotalsCard" style="display: none">
@@ -56,94 +54,8 @@
             <div class="col-sm-12">
                 <div class="card card-block" id="foodLogCard" style="display: none">
                     <h1>Food Log</h1>
-                    <!--TODO: Create an Underscore Microtemplate for a generalized table and have foodLogCardView generate these tables-->
-                    <!--The acceptable values for these meals should probably be declared as an array in app.js-->
-                    <section id="breakfastTable" style="display: none">
-                        <h3>Breakfast</h3>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Food</th>
-                                    <th>Amount</th>
-                                    <th>Calories</th>
-                                </tr>
-                            </thead>
-                            <tbody id="breakfastTableBody">
-                            </tbody>
-                        </table>
-                    </section>
-                    <section id="morningSnackTable" style="display: none">
-                        <h3>Morning Snack</h3>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Food</th>
-                                    <th>Amount</th>
-                                    <th>Calories</th>
-                                </tr>
-                            </thead>
-                            <tbody id="morningSnackTableBody">
-                            </tbody>
-                        </table>
-                    </section>
-                    <section id="lunchTable" style="display: none">
-                        <h3>Lunch</h3>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Food</th>
-                                    <th>Amount</th>
-                                    <th>Calories</th>
-                                </tr>
-                            </thead>
-                            <tbody id="lunchTableBody">
-                            </tbody>
-                        </table>
-                    </section>
-                    <section id="afternoonSnackTable" style="display: none">
-                        <h3>Afternoon Snack</h3>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Food</th>
-                                    <th>Amount</th>
-                                    <th>Calories</th>
-                                </tr>
-                            </thead>
-                            <tbody id="afternoonSnackTableBody">
-                            </tbody>
-                        </table>
-                    </section>
-                    <section id="dinnerTable" style="display: none">
-                        <h3>Dinner</h3>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Food</th>
-                                    <th>Amount</th>
-                                    <th>Calories</th>
-                                </tr>
-                            </thead>
-                            <tbody id="dinnerTableBody">
-                            </tbody>
-                        </table>
-                    </section>
-                    <section id="afterDinnerTable" style="display: none">
-                        <h3>After Dinner</h3>
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Food</th>
-                                    <th>#</th>
-                                    <th>Cals</th>
-                                </tr>
-                            </thead>
-                            <tbody id="afterDinnerTableBody">
-                            </tbody>
-                        </table>
-                    </section>
-                    </tbody>
-                    </table>
+                    <!-- Tables for each item in MEAL_TIMES are dynamically added here-->
+                    <!-- Models in foodItems Collections are then added to the appropriate table -->
                 </div>
             </div>
         </div>
@@ -152,9 +64,30 @@
 
     <!--Underscore Micro-templates-->
     <script type="text/template" id="foodLogItemTemplate">
-            <td><%= brandName %> <%= itemName %></td>
-            <td><%= amount %></td>
-            <td><%= calories %></td>
+        <td><%= brandName %> <%= itemName %></td>
+        <td><%= amount %></td>
+        <td><%= calories %></td>
+    </script>
+
+    <script type="text/template" id="inputMealTimeSelectorOptionTemplate">
+        <option><%= mealTime %></option>
+    </script>
+
+    <script type="text/template" id="foodLogTableTemplate">
+        <section id="<%= camelizedMealTime %>Table" style="display: none">
+            <h3><%= mealTime %></h3>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Food</th>
+                        <th>#</th>
+                        <th>Cals</th>
+                    </tr>
+                </thead>
+                <tbody id="<%= camelizedMealTime %>TableBody">
+                </tbody>
+            </table>
+        </section>
     </script>
 
 

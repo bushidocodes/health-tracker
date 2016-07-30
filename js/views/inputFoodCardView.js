@@ -22,6 +22,14 @@ app.InputFoodCardView = Backbone.View.extend({
         this.$inputAmount = $('#inputAmount');
         this.$inputTime = $('#inputTime');
 
+        // Initialize inputMealTimeSelectorOptionTemplate
+        var inputMealTimeSelectorOptionTemplate = _.template($('#inputMealTimeSelectorOptionTemplate').html());
+        for (var i = 0; i < MEAL_TIMES.length; i++) {
+            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': MEAL_TIMES[i]});
+            this.$inputTime.append(html);
+        };
+
+
         // Initialize a bloodhound suggestion engine with the Nutritionix search API
         // TODO: Find most intelligent possible pre-fetch
         // TODO: Figure out how to cache saved content
@@ -53,7 +61,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // Make the inputFood text field a typeahead that uses the results from the Bloodhound suggestion engine at app.engine
         $('#inputFood').typeahead(null, {
             name: 'food-items',
-            displayKey: function(data) {
+            displayKey: function (data) {
                 return data.brand_name + ' ' + data.item_name + ' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit;
             },
             source: app.engine,
@@ -63,7 +71,7 @@ app.InputFoodCardView = Backbone.View.extend({
                     'unable to find any food items that match the current query',
                     '</div>'
                 ].join('\n'),
-                suggestion: function(data) { //suggestion engine passes results to data
+                suggestion: function (data) { //suggestion engine passes results to data
                     return '<div><strong>' + data.brand_name + ' ' + data.item_name + '</strong> – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit + '</div>'
                 }
             }
