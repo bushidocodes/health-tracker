@@ -7,6 +7,7 @@ health-tracker uses vanilla Javascript and does not currently implement a build 
 * jQuery
 * Tether
 * Typeahead / Bloodhound
+* Bootstrap 4 alpha
 * Underscore
 * Backbone
 
