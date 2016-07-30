@@ -15,6 +15,7 @@ app.inputFood;
 app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
     events: {
+        'keyup #inputFood': 'resetInputFoodBuffer',
         'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
@@ -25,7 +26,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // Initialize inputMealTimeSelectorOptionTemplate
         var inputMealTimeSelectorOptionTemplate = _.template($('#inputMealTimeSelectorOptionTemplate').html());
         for (var i = 0; i < MEAL_TIMES.length; i++) {
-            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': MEAL_TIMES[i]});
+            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': MEAL_TIMES[i] });
             this.$inputTime.append(html);
         };
 
@@ -85,13 +86,21 @@ app.InputFoodCardView = Backbone.View.extend({
 
     // newAttributes() retrieves data from the form and from the app.inputFood butter and creates an object ready to be passed to app.foodItems.create();
     newAttributes: function () {
-        return {
-            brandName: app.inputFood.brand_name,
-            itemName: app.inputFood.item_name,
-            amount: this.$inputAmount.val().trim(),
-            time: this.$inputTime.val().trim(),
-            calories: app.inputFood.nf_calories * this.$inputAmount.val().trim()
-        };
+        if (!app.inputFood) {
+            //error handling for app.inputFood buffer
+            $('body').prepend('<div class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>You did not select a Nutrionix item. Please click on the food item that best matches your entry</div>');
+            this.$inputFood.focus();
+        } else if (!this.$inputAmount.val().trim()) { //add tests to make sure that $inputAmount is a non negative integer with OR
+            //error handling for inputAmount
+        } else {
+            return {
+                brandName: app.inputFood.brand_name,
+                itemName: app.inputFood.item_name,
+                amount: this.$inputAmount.val().trim(),
+                time: this.$inputTime.val().trim(),
+                calories: app.inputFood.nf_calories * this.$inputAmount.val().trim()
+            };
+        }
     },
 
     // createFoodItem(event) performs basic form validation and, if passed, adds a new foodItem to the foodItems collection. It them resets the form fields.
@@ -107,7 +116,15 @@ app.InputFoodCardView = Backbone.View.extend({
         }
 
         // create a new foodItem
-        app.foodItems.create(this.newAttributes());
+        app.foodItems.create(this.newAttributes(), {
+            error: function (model, response) {
+                $('body').append('<div class="alert alert-danger" role="alert"><strong>Oh snap!</strong> We were unable to log your' + model.itemName + 'Change a few things up and try submitting again.</div>');
+            },
+            success: function (model, response) {
+                console.log("Success... clearing app.inputFood buffer");
+                app.inputFood = null;
+            }
+        });
 
         // erase the input fields
         this.$inputFood.val('');
@@ -122,5 +139,17 @@ app.InputFoodCardView = Backbone.View.extend({
         app.inputFood = suggestionObject;
         //Automatically shift focus to the next field
         $('#inputAmount').focus();
+    },
+
+    // if not tab or enter key, clear app.inputFood buffer
+    resetInputFoodBuffer: function (e) {
+        if (app.inputFood) {
+            if (e.keyCode !== ENTER_KEY && e.keyCode !== TAB_KEY) {
+                console.log("Key press detected in inputFood field, clearing app.inputFood buffer");
+                app.inputFood = null;
+                this.$inputFood.val('');
+            }
+        }
+
     }
 });
