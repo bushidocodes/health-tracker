@@ -98,7 +98,7 @@ app.InputFoodCardView = Backbone.View.extend({
             return;
         }
 
-        // create a new todo
+        // create a new foodItem
         app.foodItems.create(this.newAttributes());
 
         // erase the input fields
