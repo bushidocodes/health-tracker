@@ -111,6 +111,9 @@ app.InputFoodCardView = Backbone.View.extend({
         // TODO: it's possible that the text field may have a dummy text entry that wasn't actually returned from Nutrionix. This needs some error handling because otherwise the new entry will have the same name and caloric value as whatever was last saved to app.inputFood
         // TODO: If successful creating new food item, wipe out app.inputFood
         // TODO: Throw error and present message to user if app.inputFood is undefined
+        // TODO: I need to decide if I want to centralize error handling here or in newAttributes. I think that it's probably best to
+        // centralize into a validateInputFoodForm() function...
+
         if (!this.$inputFood.val().trim() || !this.$inputAmount.val().trim()) {
             return;
         }
@@ -121,15 +124,13 @@ app.InputFoodCardView = Backbone.View.extend({
                 $('body').append('<div class="alert alert-danger" role="alert"><strong>Oh snap!</strong> We were unable to log your' + model.itemName + 'Change a few things up and try submitting again.</div>');
             },
             success: function (model, response) {
-                console.log("Success... clearing app.inputFood buffer");
+                console.log("Success... clearing app.inputFood buffer and reseting input fields");
                 app.inputFood = null;
+                this.$inputFood.val('');
+                this.$inputAmount.val('');
+                this.$inputTime.val("Breakfast");
             }
         });
-
-        // erase the input fields
-        this.$inputFood.val('');
-        this.$inputAmount.val('');
-        this.$inputTime.val("Breakfast");
     },
 
     // selectTypeahead() save the filtered Bloodhound suggestionObject associated with the selected typeahead item to buffer named app.inputFood
@@ -141,15 +142,24 @@ app.InputFoodCardView = Backbone.View.extend({
         $('#inputAmount').focus();
     },
 
-    // if not tab or enter key, clear app.inputFood buffer
+    // TODO: If the user hits enter when the #inputAmount field is active, validate that the value is a positive integer and then shift
+    // focus to $('#inputTime)
+
+    // TODO: If the user hits enter when the #inputTime field is active, validate that the value is a positive integer and then shift
+    // focus to $('#inputTime)
+
+    // resentInputFoodBuffer() is used to make sure that the buffer is cleared if the user selects a foodItem, but then
+    // reselectes the textField prior to form submission. The tab or enter keys are ignored because they may be hit when the
+    // user is tabbing through the form.
     resetInputFoodBuffer: function (e) {
+        // Only clear the textfield and buffer if a food item was saved to the buffer
         if (app.inputFood) {
+            // Only clear the textfield and buffer if the user hits a key other than enter or tab while the textField is selected
             if (e.keyCode !== ENTER_KEY && e.keyCode !== TAB_KEY) {
                 console.log("Key press detected in inputFood field, clearing app.inputFood buffer");
                 app.inputFood = null;
                 this.$inputFood.val('');
             }
         }
-
     }
 });
