@@ -120,7 +120,7 @@ app.InputFoodCardView = Backbone.View.extend({
             itemName: app.inputFood.item_name,
             amount: this.$inputAmount.val().trim(),
             time: this.$inputTime.val().trim(),
-            calories: app.inputFood.nf_calories * this.$inputAmount.val().trim()
+            calories: Math.round(app.inputFood.nf_calories * this.$inputAmount.val().trim())
         };
     },
 
