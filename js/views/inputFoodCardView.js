@@ -72,7 +72,7 @@ app.InputFoodCardView = Backbone.View.extend({
         });
 
         // Make the inputFood text field a typeahead that uses the results from the Bloodhound suggestion engine at app.engine
-        $('#inputFood').typeahead(null, {
+        this.typeaheadCtrl = $('#inputFood').typeahead(null, {
             name: 'food-items',
             displayKey: function (data) {
                 return data.brand_name + ' ' + data.item_name + ' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit;
@@ -89,6 +89,23 @@ app.InputFoodCardView = Backbone.View.extend({
                 }
             }
         });
+
+        // Show loading animated gif during loading
+        this.typeaheadCtrl.on('typeahead:asyncrequest', function (event, data) {
+            console.log("starting spinner");
+            // After initializing, hide the progress icon.
+            $('.tt-input').css('background', 'url("/img/ajax-loader.gif") no-repeat right');
+        });
+
+
+
+        // Configure listener to remove loading animated gif when loading is complete
+        this.typeaheadCtrl.on('typeahead:asyncreceive', function (event, data) {
+            // After initializing, hide the progress icon.
+            $('.tt-input').css('background', '');
+        });
+
+
 
         // Create Event Listeners for the special typeahead:select and typeahead:autocomplete events that fire when the end user selects an item from the typeahead menu or auto-complete suggestion. These events trigger selectTypeahead, which saves the selected foot item to app.inputFood until form submission
         this.$inputFood.on('typeahead:select', this.selectTypeahead);
@@ -166,6 +183,12 @@ app.InputFoodCardView = Backbone.View.extend({
     // reselectes the textField prior to form submission. The tab or enter keys are ignored because they may be hit when the
     // user is tabbing through the form.
     resetInputFoodBuffer: function (e) {
+
+        // if user rapidly types backspace until field is clear while async request was in progress, spinner gif will run indefinitely. This fixes the bug
+        if (this.$inputFood.val().length === 0) {
+            $('.tt-input').css('background', '');
+        }
+
         // Only clear the textfield and buffer if a food item was saved to the buffer
         if (app.inputFood) {
             // Only clear the textfield and buffer if the user hits a key other than enter or tab while the textField is selected

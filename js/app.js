@@ -5,6 +5,7 @@
 var app = app || {};
 
 // Variables
+var BACKSPACE = 8;
 var ENTER_KEY = 13;
 var TAB_KEY = 9;
 var MEAL_TIMES = ['Breakfast','Morning Snack','Lunch','Afternoon Snack','Dinner','After Dinner']
