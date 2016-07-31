@@ -10,7 +10,6 @@ app.FoodLogCardView = Backbone.View.extend({
     initialize: function () {
         // this.$input = $('#inputFood');
 
-        // TODO: Ensure that this is able to handle the reload of an existing collection from persistant storage.
         this.listenTo(app.foodItems, 'add', this.addItem);
 
         // Render the foodLogTableTemplates

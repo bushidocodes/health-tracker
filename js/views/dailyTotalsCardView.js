@@ -10,7 +10,6 @@ app.DailyTotalsCardView = Backbone.View.extend({
     initialize: function () {
         this.listenTo(app.foodItems, ' add ', this.render);
     },
-    // TODO: Ensure that this running total is able to load data from persistant storage. As is, it probably would reset to zero on page load.
     render: function () {
         var totalCals = 0;
         app.foodItems.each(function (foodItem) {
