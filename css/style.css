@@ -1,3 +1,7 @@
+body {
+  background-color: cadetblue;
+}
+
 
 /* Typeahead Styles extracted from Twitter's samples on GitHub and commented out to preserve default Bootstrap textfield styles*/
 
