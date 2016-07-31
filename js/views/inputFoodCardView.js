@@ -15,6 +15,7 @@ app.inputFood;
 app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
     events: {
+        'keyup #inputFood': 'resetInputFoodBuffer',
         'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
@@ -25,7 +26,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // Initialize inputMealTimeSelectorOptionTemplate
         var inputMealTimeSelectorOptionTemplate = _.template($('#inputMealTimeSelectorOptionTemplate').html());
         for (var i = 0; i < MEAL_TIMES.length; i++) {
-            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': MEAL_TIMES[i]});
+            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': MEAL_TIMES[i] });
             this.$inputTime.append(html);
         };
 
@@ -95,24 +96,44 @@ app.InputFoodCardView = Backbone.View.extend({
     },
 
     // createFoodItem(event) performs basic form validation and, if passed, adds a new foodItem to the foodItems collection. It them resets the form fields.
-    // TODO: Assess if the parameter event is really needed
-    createFoodItem: function (event) {
+    createFoodItem: function () {
+        // Clear any old error messages
+        $('.alert').alert('close');
+
         // if either the food item
-        // TODO: alert the user to the missing information and perhaps shift focus to that field automatically
-        // TODO: it's possible that the text field may have a dummy text entry that wasn't actually returned from Nutrionix. This needs some error handling because otherwise the new entry will have the same name and caloric value as whatever was last saved to app.inputFood
-        // TODO: If successful creating new food item, wipe out app.inputFood
-        // TODO: Throw error and present message to user if app.inputFood is undefined
-        if (!this.$inputFood.val().trim() || !this.$inputAmount.val().trim()) {
+        if (!app.inputFood || !isNormalInteger(this.$inputAmount.val().trim())) {
+            var errorMsg = "";
+            if (!app.inputFood && !isNormalInteger(this.$inputAmount.val().trim())) {
+                errorMsg = "Food Item has not been selected from Nutrionix and amount field is not a positive whole number. Correct to resubmit";
+                this.$inputFood.focus();
+            } else if (!app.inputFood) {
+                errorMsg = "Food Item has not been selected. Select to Continue";
+                this.$inputFood.focus();
+            } else if (!isNormalInteger(this.$inputAmount.val().trim())) {
+                errorMsg = "Amount field is not a positive whole number. Enter to Continue";
+                this.$inputAmount.focus();
+            }
+            $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> ' + errorMsg + '</div>');
             return;
         }
 
-        // create a new foodItem
-        app.foodItems.create(this.newAttributes());
+        // save this to self to use in callback
+        var self = this;
 
-        // erase the input fields
-        this.$inputFood.val('');
-        this.$inputAmount.val('');
-        this.$inputTime.val("Breakfast");
+        // create a new foodItem
+        app.foodItems.create(this.newAttributes(), {
+            error: function (model, response) {
+                $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><strong>Oh snap!</strong> We were unable to log your' + model.itemName + 'Change a few things up and try submitting again.</div>');
+            },
+            success: function (model, response) {
+                console.log("Success... clearing app.inputFood buffer and reseting input fields");
+                app.inputFood = null;
+                self.$inputFood.val('');
+                self.$inputAmount.val('');
+                self.$inputTime.val("Breakfast");
+                $('.alert').alert('close');
+            }
+        });
     },
 
     // selectTypeahead() save the filtered Bloodhound suggestionObject associated with the selected typeahead item to buffer named app.inputFood
@@ -122,5 +143,26 @@ app.InputFoodCardView = Backbone.View.extend({
         app.inputFood = suggestionObject;
         //Automatically shift focus to the next field
         $('#inputAmount').focus();
+    },
+
+    // TODO: If the user hits enter when the #inputAmount field is active, validate that the value is a positive integer and then shift
+    // focus to $('#inputTime)
+
+    // TODO: If the user hits enter when the #inputTime field is active, validate that the value is a positive integer and then shift
+    // focus to $('#inputTime)
+
+    // resentInputFoodBuffer() is used to make sure that the buffer is cleared if the user selects a foodItem, but then
+    // reselectes the textField prior to form submission. The tab or enter keys are ignored because they may be hit when the
+    // user is tabbing through the form.
+    resetInputFoodBuffer: function (e) {
+        // Only clear the textfield and buffer if a food item was saved to the buffer
+        if (app.inputFood) {
+            // Only clear the textfield and buffer if the user hits a key other than enter or tab while the textField is selected
+            if (e.keyCode !== ENTER_KEY && e.keyCode !== TAB_KEY) {
+                console.log("Key press detected in inputFood field, clearing app.inputFood buffer");
+                app.inputFood = null;
+                this.$inputFood.val('');
+            }
+        }
     }
 });
