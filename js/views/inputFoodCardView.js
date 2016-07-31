@@ -130,21 +130,22 @@ app.InputFoodCardView = Backbone.View.extend({
         $('.alert').alert('close');
 
         // if either the food item
-        if (!app.inputFood || !isNormalInteger(this.$inputAmount.val().trim())) {
+        if (!app.inputFood || !$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0)) {
             var errorMsg = "";
-            if (!app.inputFood && !isNormalInteger(this.$inputAmount.val().trim())) {
-                errorMsg = "Food Item has not been selected from Nutrionix and amount field is not a positive whole number. Correct to resubmit";
+            if (!app.inputFood && !($.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0))) {
+                errorMsg = "Food Item has not been selected from Nutrionix and amount field is not a positive number. Correct to resubmit";
                 this.$inputFood.focus();
             } else if (!app.inputFood) {
                 errorMsg = "Food Item has not been selected. Select to Continue";
                 this.$inputFood.focus();
-            } else if (!isNormalInteger(this.$inputAmount.val().trim())) {
-                errorMsg = "Amount field is not a positive whole number. Enter to Continue";
+                //$.isNumeric($('#inputAmount').val())
+            } else if (!$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0)) {
+                errorMsg = "Amount field is not a positive number. Enter to Continue";
                 this.$inputAmount.focus();
             }
             $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> ' + errorMsg + '</div>');
             return;
-        }
+        };
 
         // save this to self to use in callback
         var self = this;
