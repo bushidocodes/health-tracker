@@ -15,6 +15,6 @@ app.DailyTotalsCardView = Backbone.View.extend({
         app.foodItems.each(function (foodItem) {
             totalCals = totalCals + foodItem.get("calories");
         });
-        $('#numCals').text(totalCals);
+        $('#numCals').text(Math.round(totalCals));
     }
 });
