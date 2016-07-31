@@ -8,48 +8,64 @@ app.FoodLogCardView = Backbone.View.extend({
         // 'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
-        // this.$input = $('#inputFood');
 
+        // Model Event Listeners
         this.listenTo(app.foodItems, 'add', this.addItem);
 
         // Render the foodLogTableTemplates
         var tableTemplate = _.template($('#foodLogTableTemplate').html());
-        for (var i = 0; i < MEAL_TIMES.length; i++){
-            var html = tableTemplate({'mealTime': MEAL_TIMES[i], 'camelizedMealTime': camelize(MEAL_TIMES[i])});
+        for (var i = 0; i < MEAL_TIMES.length; i++) {
+            var html = tableTemplate({ 'mealTime': MEAL_TIMES[i], 'camelizedMealTime': camelize(MEAL_TIMES[i]) });
             $('#foodLogCard').append(html);
         }
+
+        // Cache jQuery Selectors for foodLogTables
+        // TODO: Make this dynamic
+        this.$breakfastTable = $('#breakfastTable');
+        this.$breakfastTableBody = $('#breakfastTableBody');
+        this.$morningSnackTable = $('#morningSnackTable');
+        this.$morningSnackTableBody = $('#morningSnackTableBody');
+        this.$lunchTable = $('#lunchTable');
+        this.$lunchTableBody = $('#lunchTableBody');
+        this.$afternoonSnackTable = $('#afternoonSnackTable');
+        this.$afternoonSnackTableBody = $('#afternoonSnackTableBody');
+        this.$dinnerTable = $('#dinnerTable');
+        this.$dinnerTableBody = $('#dinnerTableBody');
+        this.$afterDinnerTable = $('#afterDinnerTable');
+        this.$afterDinnerTableBody = $('#afterDinnerTableBody');
     },
 
     // addItem(foodItem) creates a FoodLogItemView subview (an table row <tr>), renders it as HTML, and appends it to the appropriate table for the selected meal.
     // Because the meal tables are hidden upon initial pageload, show() is called to ensure they are visible.
-    // TODO: The show() implementation below is causing to many unneccesary jQuery selections. Create variable that keeps track of state without accessing the DOM.
+    // TODO: Make this dynamic
     addItem: function (foodItem) {
         var view = new app.FoodLogItemView({ model: foodItem });
         var preRendered = view.render().el;
+
         switch (foodItem.get('time')) {
             case 'Breakfast':
-                $('#breakfastTable').show();
-                $('#breakfastTableBody').append(preRendered);
+                this.$breakfastTable.show();
+                this.$breakfastTableBody.append(preRendered);
                 break;
             case 'Morning Snack':
-                $('#morningSnackTable').show();
-                $('#morningSnackTableBody').append(preRendered);
+                this.$morningSnackTable.show();
+                this.$morningSnackTableBody.append(preRendered);
                 break;
             case 'Lunch':
-                $('#lunchTable').show();
-                $('#lunchTableBody').append(preRendered);
+                this.$lunchTable.show();
+                this.$lunchTableBody.append(preRendered);
                 break;
             case 'Afternoon Snack':
-                $('#afternoonSnackTable').show();
-                $('#afternoonSnackTableBody').append(preRendered);
+                this.$afternoonSnackTable.show();
+                this.$afternoonSnackTableBody.append(preRendered);
                 break;
             case 'Dinner':
-                $('#dinnerTable').show();
-                $('#dinnerTableBody').append(preRendered);
+                this.$dinnerTable.show();
+                this.$dinnerTableBody.append(preRendered);
                 break;
             case 'After Dinner':
-                $('#afterDinnerTable').show();
-                $('#afterDinnerTableBody').append(preRendered);
+                this.$afterDinnerTable.show();
+                this.$afterDinnerTableBody.append(preRendered);
                 break;
         };
 

@@ -86,49 +86,52 @@ app.InputFoodCardView = Backbone.View.extend({
 
     // newAttributes() retrieves data from the form and from the app.inputFood butter and creates an object ready to be passed to app.foodItems.create();
     newAttributes: function () {
-        if (!app.inputFood) {
-            //error handling for app.inputFood buffer
-            $('body').prepend('<div class="alert alert-danger alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>You did not select a Nutrionix item. Please click on the food item that best matches your entry</div>');
-            this.$inputFood.focus();
-        } else if (!this.$inputAmount.val().trim()) { //add tests to make sure that $inputAmount is a non negative integer with OR
-            //error handling for inputAmount
-        } else {
-            return {
-                brandName: app.inputFood.brand_name,
-                itemName: app.inputFood.item_name,
-                amount: this.$inputAmount.val().trim(),
-                time: this.$inputTime.val().trim(),
-                calories: app.inputFood.nf_calories * this.$inputAmount.val().trim()
-            };
-        }
+        return {
+            brandName: app.inputFood.brand_name,
+            itemName: app.inputFood.item_name,
+            amount: this.$inputAmount.val().trim(),
+            time: this.$inputTime.val().trim(),
+            calories: app.inputFood.nf_calories * this.$inputAmount.val().trim()
+        };
     },
 
     // createFoodItem(event) performs basic form validation and, if passed, adds a new foodItem to the foodItems collection. It them resets the form fields.
-    // TODO: Assess if the parameter event is really needed
-    createFoodItem: function (event) {
-        // if either the food item
-        // TODO: alert the user to the missing information and perhaps shift focus to that field automatically
-        // TODO: it's possible that the text field may have a dummy text entry that wasn't actually returned from Nutrionix. This needs some error handling because otherwise the new entry will have the same name and caloric value as whatever was last saved to app.inputFood
-        // TODO: If successful creating new food item, wipe out app.inputFood
-        // TODO: Throw error and present message to user if app.inputFood is undefined
-        // TODO: I need to decide if I want to centralize error handling here or in newAttributes. I think that it's probably best to
-        // centralize into a validateInputFoodForm() function...
+    createFoodItem: function () {
+        // Clear any old error messages
+        $('.alert').alert('close');
 
-        if (!this.$inputFood.val().trim() || !this.$inputAmount.val().trim()) {
+        // if either the food item
+        if (!app.inputFood || !isNormalInteger(this.$inputAmount.val().trim())) {
+            var errorMsg = "";
+            if (!app.inputFood && !isNormalInteger(this.$inputAmount.val().trim())) {
+                errorMsg = "Food Item has not been selected from Nutrionix and amount field is not a positive whole number. Correct to resubmit";
+                this.$inputFood.focus();
+            } else if (!app.inputFood) {
+                errorMsg = "Food Item has not been selected. Select to Continue";
+                this.$inputFood.focus();
+            } else if (!isNormalInteger(this.$inputAmount.val().trim())) {
+                errorMsg = "Amount field is not a positive whole number. Enter to Continue";
+                this.$inputAmount.focus();
+            }
+            $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> ' + errorMsg + '</div>');
             return;
         }
+
+        // save this to self to use in callback
+        var self = this;
 
         // create a new foodItem
         app.foodItems.create(this.newAttributes(), {
             error: function (model, response) {
-                $('body').append('<div class="alert alert-danger" role="alert"><strong>Oh snap!</strong> We were unable to log your' + model.itemName + 'Change a few things up and try submitting again.</div>');
+                $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><strong>Oh snap!</strong> We were unable to log your' + model.itemName + 'Change a few things up and try submitting again.</div>');
             },
             success: function (model, response) {
                 console.log("Success... clearing app.inputFood buffer and reseting input fields");
                 app.inputFood = null;
-                this.$inputFood.val('');
-                this.$inputAmount.val('');
-                this.$inputTime.val("Breakfast");
+                self.$inputFood.val('');
+                self.$inputAmount.val('');
+                self.$inputTime.val("Breakfast");
+                $('.alert').alert('close');
             }
         });
     },

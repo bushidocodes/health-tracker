@@ -17,6 +17,11 @@ function camelize(str) {
   });
 }
 
+// From http://stackoverflow.com/questions/10834796/validate-that-a-string-is-a-positive-integer
+function isNormalInteger(str) {
+    var n = ~~Number(str);
+    return String(n) === str && n >= 0;
+}
 
 $(function() {
     // Cascade the creation of App Views
