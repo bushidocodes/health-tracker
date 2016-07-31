@@ -20,6 +20,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-block" id="inputFoodCard">
+                    <h2>Enter Foods</h2>
                     <form>
                         <fieldset class="form-group">
                             <label type="label" for="inputFood">What did you eat?</label>
@@ -45,18 +46,25 @@
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-block" id="dailyTotalsCard" style="display: none">
-                    <h1>Daily Totals</h1>
-                    <h3>Calories: <span id="numCals"></span></h3>
+                    <h2>Daily Totals</h2>
+                    <hp>Calories: <span id="numCals"></span></p>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-block" id="foodLogCard" style="display: none">
-                    <h1>Food Log</h1>
+                    <h2>Food Log</h2>
                     <!-- Tables for each item in MEAL_TIMES are dynamically added here-->
                     <!-- Models in foodItems Collections are then added to the appropriate table -->
                 </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <footer class="info">
+                    <div class="text-xs-center">Written by <a href="https://github.com/spmcbride1201">Sean McBride</a> using jQuery, Bootstrap 4 alpha, Typeahead, Underscore, and Backbone</div>
+                </footer>
             </div>
         </div>
     </div>
@@ -75,7 +83,7 @@
 
     <script type="text/template" id="foodLogTableTemplate">
         <section id="<%= camelizedMealTime %>Table" style="display: none">
-            <h3><%= mealTime %></h3>
+            <h4><%= mealTime %></h4>
             <table class="table">
                 <thead>
                     <tr>

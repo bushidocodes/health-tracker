@@ -126,7 +126,6 @@ app.InputFoodCardView = Backbone.View.extend({
                 $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><strong>Oh snap!</strong> We were unable to log your' + model.itemName + 'Change a few things up and try submitting again.</div>');
             },
             success: function (model, response) {
-                console.log("Success... clearing app.inputFood buffer and reseting input fields");
                 app.inputFood = null;
                 self.$inputFood.val('');
                 self.$inputAmount.val('');
@@ -159,7 +158,6 @@ app.InputFoodCardView = Backbone.View.extend({
         if (app.inputFood) {
             // Only clear the textfield and buffer if the user hits a key other than enter or tab while the textField is selected
             if (e.keyCode !== ENTER_KEY && e.keyCode !== TAB_KEY) {
-                console.log("Key press detected in inputFood field, clearing app.inputFood buffer");
                 app.inputFood = null;
                 this.$inputFood.val('');
             }
