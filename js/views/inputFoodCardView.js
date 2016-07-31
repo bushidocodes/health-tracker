@@ -35,11 +35,17 @@ app.InputFoodCardView = Backbone.View.extend({
         // TODO: Find most intelligent possible pre-fetch
         // TODO: Figure out how to cache saved content
         app.engine = new Bloodhound({
+            initialize: false, // set to false to use promise based initialization for error handling
             // I am unsure why I am passing datum.brand_name... This is probably not needed.
             datumTokenizer: function (datum) {
                 return Bloodhound.tokenizers.whitespace(datum.brand_name)
             },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
+            // Use prefetch with cache set to false to do a test API call. If this fails, we use
+            prefetch: {
+                url: 'https://api.nutritionix.com/v1_1/search/$taco?results=0:20&fields=*&appId=aa511326&appKey=599102964bee7e4e92c3f8a9b4bfcdd4',
+                cache: false
+            },
             remote: {
                 url: 'https://api.nutritionix.com/v1_1/search/$%QUERY?results=0:20&fields=*&appId=aa511326&appKey=599102964bee7e4e92c3f8a9b4bfcdd4',
                 wildcard: '%QUERY',
@@ -57,6 +63,12 @@ app.InputFoodCardView = Backbone.View.extend({
                     });
                 }
             }
+        });
+
+        var promise = app.engine.initialize();
+        promise.fail(function () {
+            $('body').prepend('<div class="alert alert-danger text-xs-center" role="alert"><strong>Nutrionix is not responding</strong></div>');
+            $('#inputFoodSubmit').prop("disabled", true);
         });
 
         // Make the inputFood text field a typeahead that uses the results from the Bloodhound suggestion engine at app.engine
