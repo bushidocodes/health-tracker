@@ -11,6 +11,7 @@ app.FoodLogCardView = Backbone.View.extend({
 
         // Model Event Listeners
         this.listenTo(app.foodItems, 'add', this.addItem);
+        this.listenTo(app.foodItems, 'remove', this.hideTableIfEmpty);
 
         // Render the foodLogTableTemplates
         var tableTemplate = _.template($('#foodLogTableTemplate').html());
@@ -69,5 +70,14 @@ app.FoodLogCardView = Backbone.View.extend({
                 break;
         };
 
+    },
+
+    // hideTableIfEmpty() checks to see the meal table that model was in is now empty. If it is, it's hidden.
+    hideTableIfEmpty: function (model) {
+        var tableString = '#'+camelize(model.get('time'))+'Table'
+        var table = $(tableString);
+        var tableBodyString = '#'+camelize(model.get('time'))+'TableBody'
+        var tableBody = $(tableBodyString);
+        if (tableBody.children().length === 0) table.hide();
     }
 });

@@ -9,6 +9,7 @@ app.DailyTotalsCardView = Backbone.View.extend({
     el: '#dailyTotalsCard',
     initialize: function () {
         this.listenTo(app.foodItems, ' add ', this.render);
+        this.listenTo(app.foodItems, 'remove', this.render);
     },
     render: function () {
         var totalCals = 0;
