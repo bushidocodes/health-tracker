@@ -43,11 +43,11 @@ app.InputFoodCardView = Backbone.View.extend({
             queryTokenizer: Bloodhound.tokenizers.whitespace,
             // Use prefetch with cache set to false to do a test API call. If this fails, we use
             prefetch: {
-                url: 'https://api.nutritionix.com/v1_1/search/$taco?results=0:20&fields=*&appId=aa511326&appKey=599102964bee7e4e92c3f8a9b4bfcdd4',
+                url: 'https://api.nutritionix.com/v1_1/search/$taco?results=0:20&fields=*&appId=acfb1b0d&appKey=ef543667144b7c993873ddff9d87a9d2',
                 cache: false
             },
             remote: {
-                url: 'https://api.nutritionix.com/v1_1/search/$%QUERY?results=0:20&fields=*&appId=aa511326&appKey=599102964bee7e4e92c3f8a9b4bfcdd4',
+                url: 'https://api.nutritionix.com/v1_1/search/$%QUERY?results=0:20&fields=*&appId=acfb1b0d&appKey=ef543667144b7c993873ddff9d87a9d2',
                 wildcard: '%QUERY',
                 // Filter out uneful info from the Nutritionix API response and refactor into a format that Bloodhound can use
                 filter: function (response) {
