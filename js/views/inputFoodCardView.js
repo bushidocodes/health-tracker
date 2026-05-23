@@ -146,7 +146,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // create a new foodItem
         app.foodItems.create(this.newAttributes(), {
             error: function (model, response) {
-                $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><strong>Oh snap!</strong> We were unable to log your' + model.itemName + 'Change a few things up and try submitting again.</div>');
+                $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> We were unable to log your ' + model.get('itemName') + '. Change a few things up and try submitting again.</div>');
             },
             success: function (model, response) {
                 app.inputFood = null;
