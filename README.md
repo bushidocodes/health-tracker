@@ -11,15 +11,15 @@ health-tracker uses vanilla Javascript and does not currently implement a build 
 * Underscore
 * Backbone
 
-You can [view the latest version of this app live on GitHub Pages](http://spmcb.com/health-tracker)
+You can [view the latest version of this app live on GitHub Pages](https://bushidocodes.github.io/health-tracker/)
 
 Or to install locally, execute the following:
 ```
-git clone https://github.com/spmcbride1201/health-tracker.git
+git clone https://github.com/bushidocodes/health-tracker.git
 cd health-tracker
 ```
 
-...and then open ./dist/index.htm in your browser of choice
+...and then open `index.html` in your browser of choice
 
 ## Built with love using
 * [Visual Studio Code](https://code.visualstudio.com/)
