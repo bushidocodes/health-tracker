@@ -6,7 +6,7 @@
     <!--Responsive Viewport Meta Tag-->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Health Tracker</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.2/css/bootstrap.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/style.css">
 </head>
 
@@ -14,12 +14,12 @@
     <div class="container-fluid">
         <div class="row">
             <div class="col-sm-12">
-                <h1 class="text-xs-center">Health Tracker</h1>
+                <h1 class="text-center">Health Tracker</h1>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-block" id="inputFoodCard">
+                <div class="card card-body" id="inputFoodCard">
                     <h2>Enter Foods</h2>
                     <form>
                         <fieldset class="form-group">
@@ -45,7 +45,7 @@
 
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-block" id="dailyTotalsCard" style="display: none">
+                <div class="card card-body" id="dailyTotalsCard" style="display: none">
                     <h2>Daily Totals</h2>
                     <p>Calories: <span id="numCals"></span></p>
                 </div>
@@ -53,7 +53,7 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
-                <div class="card card-block" id="foodLogCard" style="display: none">
+                <div class="card card-body" id="foodLogCard" style="display: none">
                     <h2>Food Log</h2>
                     <!-- Tables for each item in MEAL_TIMES are dynamically added here-->
                     <!-- Models in foodItems Collections are then added to the appropriate table -->
@@ -63,7 +63,7 @@
         <div class="row">
             <div class="col-sm-12">
                 <footer class="info">
-                    <div class="text-xs-center">Written by <a href="https://github.com/bushidocodes">Sean McBride</a> using jQuery, Bootstrap 4 alpha, Typeahead, Underscore, Backbone, and the USDA FoodData Central API</div>
+                    <div class="text-center">Written by <a href="https://github.com/bushidocodes">Sean McBride</a> using jQuery, Bootstrap 4, Typeahead, Underscore, Backbone, and the USDA FoodData Central API</div>
                 </footer>
             </div>
         </div>
@@ -102,8 +102,7 @@
 
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.3.3/js/tether.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0-alpha.2/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.6.2/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typeahead.js/0.11.1/typeahead.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/underscore.js/1.8.3/underscore-min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/backbone.js/1.3.3/backbone-min.js"></script>

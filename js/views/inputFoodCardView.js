@@ -64,7 +64,7 @@ app.InputFoodCardView = Backbone.View.extend({
 
         var promise = app.engine.initialize();
         promise.fail(function () {
-            $('body').prepend('<div class="alert alert-danger text-xs-center" role="alert"><strong>USDA FoodData Central is not responding</strong></div>');
+            $('body').prepend('<div class="alert alert-danger text-center" role="alert"><strong>USDA FoodData Central is not responding</strong></div>');
             $('#inputFoodSubmit').prop("disabled", true);
         });
 
@@ -131,7 +131,7 @@ app.InputFoodCardView = Backbone.View.extend({
                 errorMsg = "Amount field is not a positive number. Enter to Continue";
                 this.$inputAmount.focus();
             }
-            $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> ' + errorMsg + '</div>');
+            $('body').prepend('<div class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> ' + errorMsg + '</div>');
             return;
         };
 
@@ -141,7 +141,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // create a new foodItem
         app.foodItems.create(this.newAttributes(), {
             error: function (model, response) {
-                $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> We were unable to log your ' + model.get('itemName') + '. Change a few things up and try submitting again.</div>');
+                $('body').prepend('<div class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> We were unable to log your ' + model.get('itemName') + '. Change a few things up and try submitting again.</div>');
             },
             success: function (model, response) {
                 app.inputFood = null;
