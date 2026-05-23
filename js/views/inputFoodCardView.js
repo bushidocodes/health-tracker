@@ -152,7 +152,7 @@ app.InputFoodCardView = Backbone.View.extend({
                 app.inputFood = null;
                 self.$inputFood.val('');
                 self.$inputAmount.val('');
-                self.$inputTime.val("Breakfast");
+                self.$inputTime.val(MEAL_TIMES[0]);
                 $('.alert').alert('close');
             }
         });
