@@ -3,11 +3,10 @@ health-tracker is a JavaScript application that allows users to log what they've
 
 ## Project Setup
 
-health-tracker uses vanilla Javascript and does not currently implement a build process. The following external libraries are linked from [cdnjs](https://cdnjs.com/):
+health-tracker uses vanilla Javascript and does not currently implement a build process. The following external libraries are linked from a CDN
 * jQuery
-* Tether
 * Typeahead / Bloodhound
-* Bootstrap 4 alpha
+* Bootstrap 4
 * Underscore
 * Backbone
 
@@ -21,8 +20,5 @@ cd health-tracker
 
 ...and then open `index.html` in your browser of choice
 
-## Built with love using
-* [Visual Studio Code](https://code.visualstudio.com/)
-
 ## Authors
-* Sean McBride - [spmcbride1201](https://github.com/bushidocodes)
+* Sean McBride - [bushidocodes](https://github.com/bushidocodes)
