@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Overview
 
-Health Tracker is a vanilla JavaScript web application for logging daily food intake and calculating caloric totals. It uses the Nutritionix API for food data lookups and persists all data to the browser's localStorage.
+Health Tracker is a vanilla JavaScript web application for logging daily food intake and calculating caloric totals. It uses the USDA FoodData Central API for food data lookups and persists all data to the browser's localStorage.
 
 ## Tech Stack
 
@@ -13,7 +13,7 @@ Health Tracker is a vanilla JavaScript web application for logging daily food in
 - **Styling**: Bootstrap 4 alpha
 - **Autocomplete**: Typeahead.js with Bloodhound suggestion engine
 - **Persistence**: Backbone.localStorage adapter
-- **External API**: Nutritionix v1.1 API for food data
+- **External API**: USDA FoodData Central API for food data (free; `DEMO_KEY` used by default — register at https://fdc.nal.usda.gov/api-key-signup.html for higher rate limits)
 - **No build process**: Vanilla JavaScript with CDN-linked dependencies (no npm, no build step)
 
 ## Running the App
@@ -38,7 +38,7 @@ index.htm (main entry point, loads all JS files and templates)
 ├── Collections: FoodItemList (persisted to localStorage)
 └── Views:
     ├── AppView (orchestrates visibility of all cards)
-    ├── InputFoodCardView (typeahead form with Nutritionix integration)
+    ├── InputFoodCardView (typeahead form with USDA FoodData Central integration)
     ├── DailyTotalsCardView (displays total calories)
     ├── FoodLogCardView (contains meal time tables)
     └── FoodLogItemView (individual food entry row in a table)
@@ -46,7 +46,7 @@ index.htm (main entry point, loads all JS files and templates)
 
 ### Data Flow
 
-1. **Input**: User types food name → Typeahead queries Nutritionix API → Bloodhound filters/caches results
+1. **Input**: User types food name → Typeahead queries USDA FoodData Central API → Bloodhound filters/caches results
 2. **Selection**: User selects from dropdown → selected data stored in `app.inputFood` buffer
 3. **Amount**: User enters quantity → multiplied by API calorie data to calculate total calories
 4. **Persistence**: Form submit triggers `foodItems.create()` → Backbone.localStorage saves to browser
@@ -57,7 +57,7 @@ index.htm (main entry point, loads all JS files and templates)
 
 - `app.foodItems`: Global Backbone collection holding all FoodItem models for the current day
 - `app.inputFood`: Buffer holding the selected typeahead suggestion between selection and form submission
-- `app.engine`: Global Bloodhound instance for caching and querying Nutritionix API results
+- `app.engine`: Global Bloodhound instance for caching and querying USDA FoodData Central API results
 - `MEAL_TIMES`: Array of six meal periods (Breakfast, Morning Snack, Lunch, Afternoon Snack, Dinner, After Dinner) used throughout the app
 
 ### File Organization
@@ -97,9 +97,9 @@ Backbone views use the `events` hash to delegate listeners:
 - `FoodLogItemView`: Listens for click on `.destroy` button to delete the model
 - Views listen to collection events ('add', 'remove') to re-render
 
-### Nutritionix API Integration
+### USDA FoodData Central API Integration
 
-The API is queried via Bloodhound with hardcoded credentials in the request URL. Rate limiting is known to occur (see git history: "Swap out API keys after hitting daily limit"). API responses are filtered and transformed to extract only needed fields (brand_name, item_name, nf_calories, nf_serving_size_qty, nf_serving_size_unit).
+The API is queried via Bloodhound using the free `DEMO_KEY` (30 req/hour, 50 req/day per IP). The API key is stored in the `USDA_API_KEY` variable at the top of the Bloodhound init block in `inputFoodCardView.js`. API responses are filtered and transformed to extract only needed fields: `brand_name` (from `brandOwner`), `item_name` (from `description`), `nf_calories` (from `foodNutrients` where `nutrientId === 1008`), `nf_serving_size_qty` (rounded to 1 decimal), and `nf_serving_size_unit`.
 
 ### Form Validation
 

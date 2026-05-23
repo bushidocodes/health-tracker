@@ -1,5 +1,5 @@
 # health-tracker
-health-tracker is a JavaScript application that allows users to log what they've eaten during the day and calculate caloric totals. It polls the Nutritionix API for caloric data of food items and all data is stored in your browser's local-storage.
+health-tracker is a JavaScript application that allows users to log what they've eaten during the day and calculate caloric totals. It polls the [USDA FoodData Central API](https://fdc.nal.usda.gov/) for caloric data of food items and all data is stored in your browser's local-storage.
 
 ## Project Setup
 
