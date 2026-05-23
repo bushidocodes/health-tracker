@@ -125,7 +125,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // if either the food item
         if (!app.inputFood || !$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0)) {
             var errorMsg = "";
-            if (!app.inputFood && !($.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0))) {
+            if (!app.inputFood && (!$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0))) {
                 errorMsg = "Food Item has not been selected from the search and amount field is not a positive number. Correct to resubmit";
                 this.$inputFood.focus();
             } else if (!app.inputFood) {
