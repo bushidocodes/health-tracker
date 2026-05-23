@@ -6,11 +6,8 @@
 // Declare app if not declared
 var app = app || {};
 
-// save bloodhound globally to be able to query cached data. This is currently NOT utilized
-app.engine;
-
-// save inputFood buffer globally. This should probably be moved into app.InputFoodCardView
-app.inputFood;
+app.engine = null;
+app.inputFood = null;
 
 app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
