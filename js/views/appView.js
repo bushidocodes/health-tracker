@@ -8,10 +8,8 @@ app.AppView = Backbone.View.extend({
         new app.InputFoodCardView();
         new app.DailyTotalsCardView();
         new app.FoodLogCardView();
-        // cache DOM calls
         this.dailyTotalsCard = $('#dailyTotalsCard');
         this.foodLogCard = $('#foodLogCard');
-        // this.allCheckbox = this.$('#toggle-all')[0];
 
         // configure listeners for when a foodItem is added to the collection
         this.listenTo(app.foodItems, 'add', this.render);

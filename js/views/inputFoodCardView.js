@@ -101,8 +101,6 @@ app.InputFoodCardView = Backbone.View.extend({
         this.$inputFood.on('typeahead:select', this.selectTypeahead);
         this.$inputFood.on('typeahead:autocomplete', this.selectTypeahead);
     },
-    // render: function () { },
-
     // newAttributes() retrieves data from the form and from the app.inputFood butter and creates an object ready to be passed to app.foodItems.create();
     newAttributes: function () {
         return {
