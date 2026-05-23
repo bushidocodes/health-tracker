@@ -90,19 +90,12 @@ app.InputFoodCardView = Backbone.View.extend({
             }
         });
 
-        // Show loading animated gif during loading
-        this.typeaheadCtrl.on('typeahead:asyncrequest', function (event, data) {
-            console.log("starting spinner");
-            // After initializing, hide the progress icon.
-            $('.tt-input').css('background', 'url("/img/ajax-loader.gif") no-repeat right');
+        this.typeaheadCtrl.on('typeahead:asyncrequest', function () {
+            $('.tt-input').css('cursor', 'wait');
         });
 
-
-
-        // Configure listener to remove loading animated gif when loading is complete
-        this.typeaheadCtrl.on('typeahead:asyncreceive', function (event, data) {
-            // After initializing, hide the progress icon.
-            $('.tt-input').css('background', '');
+        this.typeaheadCtrl.on('typeahead:asyncreceive', function () {
+            $('.tt-input').css('cursor', '');
         });
 
 
