@@ -14,7 +14,7 @@ app.AppView = Backbone.View.extend({
         // this.allCheckbox = this.$('#toggle-all')[0];
 
         // configure listeners for when a foodItem is added to the collection
-        this.listenTo(app.foodItems, ' add ', this.render);
+        this.listenTo(app.foodItems, 'add', this.render);
     },
 
     render: function () {
