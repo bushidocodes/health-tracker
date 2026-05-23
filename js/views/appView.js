@@ -16,7 +16,7 @@ app.AppView = Backbone.View.extend({
     },
 
     render: function () {
-        if (app.foodItems) {
+        if (app.foodItems.length) {
             this.dailyTotalsCard.show();
             this.foodLogCard.show();
         }
