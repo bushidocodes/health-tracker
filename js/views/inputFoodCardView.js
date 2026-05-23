@@ -1,5 +1,5 @@
 // The inputFoodCardView is a Backbone View associated with the topmost Bootstrap 4 card.
-// It is the User Interface for data entry and is responsible for leveraging the Nutritionix API
+// It is the User Interface for data entry and is responsible for leveraging the USDA FoodData Central API
 // This view renders immediately upon page load
 
 
@@ -31,34 +31,34 @@ app.InputFoodCardView = Backbone.View.extend({
         };
 
 
-        // Initialize a bloodhound suggestion engine with the Nutritionix search API
-        // TODO: Find most intelligent possible pre-fetch
-        // TODO: Figure out how to cache saved content
+        // Initialize a bloodhound suggestion engine with the USDA FoodData Central search API
+        // DEMO_KEY: 30 req/hour, 50 req/day. Register at https://fdc.nal.usda.gov/api-key-signup.html for higher limits.
+        var USDA_API_KEY = 'DEMO_KEY';
         app.engine = new Bloodhound({
-            initialize: false, // set to false to use promise based initialization for error handling
-            // I am unsure why I am passing datum.brand_name... This is probably not needed.
+            initialize: false,
             datumTokenizer: function (datum) {
-                return Bloodhound.tokenizers.whitespace(datum.brand_name)
+                return Bloodhound.tokenizers.whitespace(datum.brand_name + ' ' + datum.item_name);
             },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            // Use prefetch with cache set to false to do a test API call. If this fails, we use
             prefetch: {
-                url: 'https://api.nutritionix.com/v1_1/search/$taco?results=0:20&fields=*&appId=acfb1b0d&appKey=ef543667144b7c993873ddff9d87a9d2',
+                url: 'https://api.nal.usda.gov/fdc/v1/foods/search?query=apple&api_key=' + USDA_API_KEY + '&pageSize=20',
                 cache: false
             },
             remote: {
-                url: 'https://api.nutritionix.com/v1_1/search/$%QUERY?results=0:20&fields=*&appId=acfb1b0d&appKey=ef543667144b7c993873ddff9d87a9d2',
+                url: 'https://api.nal.usda.gov/fdc/v1/foods/search?query=%QUERY&api_key=' + USDA_API_KEY + '&pageSize=20',
                 wildcard: '%QUERY',
-                // Filter out uneful info from the Nutritionix API response and refactor into a format that Bloodhound can use
                 filter: function (response) {
-                    return $.map(response.hits, function (hit) {
+                    return $.map(response.foods || [], function (food) {
+                        var energyNutrient = $.grep(food.foodNutrients || [], function (n) {
+                            return n.nutrientId === 1008;
+                        })[0];
                         return {
-                            item_id: hit.fields.item_id,
-                            brand_name: hit.fields.brand_name,
-                            item_name: hit.fields.item_name,
-                            nf_serving_size_unit: hit.fields.nf_serving_size_unit,
-                            nf_serving_size_qty: hit.fields.nf_serving_size_qty,
-                            nf_calories: hit.fields.nf_calories
+                            item_id: food.fdcId,
+                            brand_name: food.brandOwner || food.brandName || '',
+                            item_name: food.description || '',
+                            nf_serving_size_unit: food.servingSizeUnit || 'serving',
+                            nf_serving_size_qty: food.servingSize ? Math.round(food.servingSize * 10) / 10 : 1,
+                            nf_calories: energyNutrient ? energyNutrient.value : 0
                         };
                     });
                 }
@@ -67,7 +67,7 @@ app.InputFoodCardView = Backbone.View.extend({
 
         var promise = app.engine.initialize();
         promise.fail(function () {
-            $('body').prepend('<div class="alert alert-danger text-xs-center" role="alert"><strong>Nutrionix is not responding</strong></div>');
+            $('body').prepend('<div class="alert alert-danger text-xs-center" role="alert"><strong>USDA FoodData Central is not responding</strong></div>');
             $('#inputFoodSubmit').prop("disabled", true);
         });
 
@@ -133,7 +133,7 @@ app.InputFoodCardView = Backbone.View.extend({
         if (!app.inputFood || !$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0)) {
             var errorMsg = "";
             if (!app.inputFood && !($.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0))) {
-                errorMsg = "Food Item has not been selected from Nutrionix and amount field is not a positive number. Correct to resubmit";
+                errorMsg = "Food Item has not been selected from the search and amount field is not a positive number. Correct to resubmit";
                 this.$inputFood.focus();
             } else if (!app.inputFood) {
                 errorMsg = "Food Item has not been selected. Select to Continue";
