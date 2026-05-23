@@ -20,7 +20,7 @@ Health Tracker is a vanilla JavaScript web application for logging daily food in
 
 There are no build, lint, or test commands. The application is a static HTML file served directly:
 
-1. Open `index.htm` in any modern web browser
+1. Open `index.html` in any modern web browser
 2. The app immediately initializes and loads any previously saved food items from localStorage
 3. No server, build process, or dependencies to install
 
@@ -33,7 +33,7 @@ For local development, you can use any simple HTTP server (e.g., `python -m http
 The app follows Backbone.js MVC patterns with views managing UI cards and a collection managing food item data:
 
 ```
-index.htm (main entry point, loads all JS files and templates)
+index.html (main entry point, loads all JS files and templates)
 ├── Models: FoodItem (single food entry with caloric data)
 ├── Collections: FoodItemList (persisted to localStorage)
 └── Views:
@@ -76,14 +76,14 @@ js/
     └── foodLogItemView.js (individual food row with delete button)
 css/style.css  (minimal custom styling, mostly uses Bootstrap)
 data/example_collection.json  (example data for reference, not used by app)
-index.htm  (HTML templates + script loading)
+index.html  (HTML templates + script loading)
 ```
 
 ## Important Implementation Details
 
 ### Underscore Microtemplate Pattern
 
-All dynamic HTML uses Underscore.js `_.template()` which is embedded in `index.htm`:
+All dynamic HTML uses Underscore.js `_.template()` which is embedded in `index.html`:
 - `#foodLogItemTemplate`: Renders food row (brand, item, amount, calories, delete button)
 - `#inputMealTimeSelectorOptionTemplate`: Renders meal time dropdown option
 - `#foodLogTableTemplate`: Creates meal time table sections
