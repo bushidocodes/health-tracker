@@ -25,4 +25,4 @@ cd health-tracker
 * [Visual Studio Code](https://code.visualstudio.com/)
 
 ## Authors
-* Sean McBride - [spmcbride1201](https://github.com/spmcbride1201)
+* Sean McBride - [spmcbride1201](https://github.com/bushidocodes)

@@ -6,11 +6,8 @@
 // Declare app if not declared
 var app = app || {};
 
-// save bloodhound globally to be able to query cached data. This is currently NOT utilized
-app.engine;
-
-// save inputFood buffer globally. This should probably be moved into app.InputFoodCardView
-app.inputFood;
+app.engine = null;
+app.inputFood = null;
 
 app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
@@ -90,19 +87,12 @@ app.InputFoodCardView = Backbone.View.extend({
             }
         });
 
-        // Show loading animated gif during loading
-        this.typeaheadCtrl.on('typeahead:asyncrequest', function (event, data) {
-            console.log("starting spinner");
-            // After initializing, hide the progress icon.
-            $('.tt-input').css('background', 'url("/img/ajax-loader.gif") no-repeat right');
+        this.typeaheadCtrl.on('typeahead:asyncrequest', function () {
+            $('.tt-input').css('cursor', 'wait');
         });
 
-
-
-        // Configure listener to remove loading animated gif when loading is complete
-        this.typeaheadCtrl.on('typeahead:asyncreceive', function (event, data) {
-            // After initializing, hide the progress icon.
-            $('.tt-input').css('background', '');
+        this.typeaheadCtrl.on('typeahead:asyncreceive', function () {
+            $('.tt-input').css('cursor', '');
         });
 
 
@@ -111,8 +101,6 @@ app.InputFoodCardView = Backbone.View.extend({
         this.$inputFood.on('typeahead:select', this.selectTypeahead);
         this.$inputFood.on('typeahead:autocomplete', this.selectTypeahead);
     },
-    // render: function () { },
-
     // newAttributes() retrieves data from the form and from the app.inputFood butter and creates an object ready to be passed to app.foodItems.create();
     newAttributes: function () {
         return {
@@ -132,7 +120,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // if either the food item
         if (!app.inputFood || !$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0)) {
             var errorMsg = "";
-            if (!app.inputFood && !($.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0))) {
+            if (!app.inputFood && (!$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0))) {
                 errorMsg = "Food Item has not been selected from the search and amount field is not a positive number. Correct to resubmit";
                 this.$inputFood.focus();
             } else if (!app.inputFood) {
@@ -153,13 +141,13 @@ app.InputFoodCardView = Backbone.View.extend({
         // create a new foodItem
         app.foodItems.create(this.newAttributes(), {
             error: function (model, response) {
-                $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><strong>Oh snap!</strong> We were unable to log your' + model.itemName + 'Change a few things up and try submitting again.</div>');
+                $('body').prepend('<div class="alert alert-warning alert-dismissible fade in" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> We were unable to log your ' + model.get('itemName') + '. Change a few things up and try submitting again.</div>');
             },
             success: function (model, response) {
                 app.inputFood = null;
                 self.$inputFood.val('');
                 self.$inputAmount.val('');
-                self.$inputTime.val("Breakfast");
+                self.$inputTime.val(MEAL_TIMES[0]);
                 $('.alert').alert('close');
             }
         });

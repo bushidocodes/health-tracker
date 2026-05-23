@@ -1,7 +1,7 @@
 // Declare app if not declared
 var app = app || {};
 
-// app.FoodLogItemView is a subview rendered within app.FoodLogCardView that is responsible for rendering table rows for models in the app.foodItems collection using the Underscore microtemplate named #foodLogItemTemplate, which is embedded in index.htm
+// app.FoodLogItemView is a subview rendered within app.FoodLogCardView that is responsible for rendering table rows for models in the app.foodItems collection using the Underscore microtemplate named #foodLogItemTemplate, which is embedded in index.html
 
 app.FoodLogItemView = Backbone.View.extend({
 
@@ -16,9 +16,7 @@ app.FoodLogItemView = Backbone.View.extend({
 
     // When initialized, being listening to the associated model and rerun reder when a change is detected
     initialize: function () {
-        // this.listenTo(this.model, 'change', this.render);
         this.listenTo(this.model, 'destroy', this.remove);
-        // this.listenTo(this.model, 'visible', this.toggleVisible);
     },
 
     render: function () {
