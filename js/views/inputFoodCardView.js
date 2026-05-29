@@ -81,8 +81,12 @@ app.InputFoodCardView = Backbone.View.extend({
                     'unable to find any food items that match the current query',
                     '</div>'
                 ].join('\n'),
-                suggestion: function (data) { //suggestion engine passes results to data
-                    return '<div><strong>' + data.brand_name + ' ' + data.item_name + '</strong> – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit + '</div>'
+                suggestion: function (data) {
+                    return $('<div>').append(
+                        $('<strong>').text((data.brand_name || '') + ' ' + (data.item_name || ''))
+                    ).append(
+                        $('<span>').text(' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit)
+                    ).prop('outerHTML');
                 }
             }
         });

@@ -72,19 +72,19 @@
 
     <!--Underscore Micro-templates-->
     <script type="text/template" id="foodLogItemTemplate">
-        <td><%= brandName %> <%= itemName %></td>
-        <td><%= amount %></td>
-        <td><%= calories %></td>
+        <td><%- brandName %> <%- itemName %></td>
+        <td><%- amount %></td>
+        <td><%- calories %></td>
         <td><button class="destroy">Delete</button></td>
     </script>
 
     <script type="text/template" id="inputMealTimeSelectorOptionTemplate">
-        <option><%= mealTime %></option>
+        <option><%- mealTime %></option>
     </script>
 
     <script type="text/template" id="foodLogTableTemplate">
-        <section id="<%= camelizedMealTime %>Table" style="display: none">
-            <h4><%= mealTime %></h4>
+        <section id="<%- camelizedMealTime %>Table" style="display: none">
+            <h4><%- mealTime %></h4>
             <table class="table">
                 <thead>
                     <tr>
@@ -94,7 +94,7 @@
                         <th></th>
                     </tr>
                 </thead>
-                <tbody id="<%= camelizedMealTime %>TableBody">
+                <tbody id="<%- camelizedMealTime %>TableBody">
                 </tbody>
             </table>
         </section>
