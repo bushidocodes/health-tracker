@@ -14,14 +14,14 @@ app.FoodLogItemView = Backbone.View.extend({
     // use the item-template Underscore microtemplate to render as HTML
     template: _.template($('#foodLogItemTemplate').html()),
 
-    // When initialized, being listening to the associated model and rerun reder when a change is detected
+    // When initialized, begin listening to the associated model and re-render when a change is detected
     initialize: function () {
         this.listenTo(this.model, 'destroy', this.remove);
     },
 
     render: function () {
         this.$el.html(this.template(this.model.attributes));
-        return this; // this allow for chaining
+        return this; // allows chaining
     },
 
     // Delete the foodItem from app.foodItems
