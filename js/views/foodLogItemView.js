@@ -5,7 +5,7 @@ var app = app || {};
 
 app.FoodLogItemView = Backbone.View.extend({
 
-    // Each foodLogItem is diplayed as a row item in the foodLogCard table
+    // Each foodLogItem is displayed as a row item in the foodLogCard table
     tagName: 'tr',
     events: {
         'click .destroy': 'clear' //call clear when button.destroy is clicked

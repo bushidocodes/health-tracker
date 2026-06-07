@@ -104,14 +104,15 @@ app.InputFoodCardView = Backbone.View.extend({
         this.$inputFood.on('typeahead:select', this.selectTypeahead);
         this.$inputFood.on('typeahead:autocomplete', this.selectTypeahead);
     },
-    // newAttributes() retrieves data from the form and from the app.inputFood butter and creates an object ready to be passed to app.foodItems.create();
+    // newAttributes() retrieves data from the form and from the app.inputFood buffer and creates an object ready to be passed to app.foodItems.create();
     newAttributes: function () {
+        var amount = parseFloat(this.$inputAmount.val().trim());
         return {
             brandName: app.inputFood.brand_name,
             itemName: app.inputFood.item_name,
-            amount: parseFloat(this.$inputAmount.val().trim()),
+            amount: amount,
             time: this.$inputTime.val().trim(),
-            calories: Math.round(app.inputFood.nf_calories * this.$inputAmount.val().trim())
+            calories: Math.round(app.inputFood.nf_calories * amount)
         };
     },
 
@@ -154,12 +155,9 @@ app.InputFoodCardView = Backbone.View.extend({
         });
     },
 
-    // selectTypeahead() save the filtered Bloodhound suggestionObject associated with the selected typeahead item to buffer named app.inputFood
-    // This buffer is used to store the data until form submission and creation of a new foodItem to the foodItems collection via createFoodItem().
+    // selectTypeahead() saves the filtered Bloodhound suggestionObject to app.inputFood buffer until form submission.
     selectTypeahead: function (event, suggestionObject) {
-        //
         app.inputFood = suggestionObject;
-        //Automatically shift focus to the next field
         $('#inputAmount').focus();
     },
 
@@ -173,9 +171,8 @@ app.InputFoodCardView = Backbone.View.extend({
         }
 
         if (app.inputFood) {
-            var IGNORED_KEYS = [9, 13, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 91, 92, 93];
             var isFunctionKey = e.keyCode >= 112 && e.keyCode <= 123;
-            if (IGNORED_KEYS.indexOf(e.keyCode) === -1 && !isFunctionKey) {
+            if (app.IGNORED_KEYS.indexOf(e.keyCode) === -1 && !isFunctionKey) {
                 app.inputFood = null;
                 this.$inputFood.val('');
             }
