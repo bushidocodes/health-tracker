@@ -15,17 +15,17 @@ app.FoodLogItemView = Backbone.View.extend({
     template: _.template($('#foodLogItemTemplate').html()),
 
     // When initialized, begin listening to the associated model and re-render when a change is detected
-    initialize: function () {
+    initialize() {
         this.listenTo(this.model, 'destroy', this.remove);
     },
 
-    render: function () {
+    render() {
         this.$el.html(this.template(this.model.attributes));
         return this; // allows chaining
     },
 
     // Delete the foodItem from app.foodItems
-    clear: function () {
+    clear() {
         this.model.destroy();
     }
 

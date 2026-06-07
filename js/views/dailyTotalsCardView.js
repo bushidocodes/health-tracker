@@ -7,13 +7,11 @@ var app = app || {};
 
 app.DailyTotalsCardView = Backbone.View.extend({
     el: '#dailyTotalsCard',
-    initialize: function () {
+    initialize() {
         this.listenTo(app.foodItems, 'add remove', this.render);
     },
-    render: function () {
-        const totalCals = app.foodItems.reduce(function (sum, item) {
-            return sum + item.get('calories');
-        }, 0);
+    render() {
+        const totalCals = app.foodItems.reduce((sum, item) => sum + item.get('calories'), 0);
         this.$('#numCals').text(Math.round(totalCals));
     }
 });

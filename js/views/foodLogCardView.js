@@ -3,8 +3,7 @@ var app = app || {};
 
 app.FoodLogCardView = Backbone.View.extend({
     el: '#foodLogCard',
-    initialize: function () {
-
+    initialize() {
         // Model Event Listeners
         this.listenTo(app.foodItems, 'add', this.addItem);
         this.listenTo(app.foodItems, 'remove', this.hideTableIfEmpty);
@@ -13,15 +12,15 @@ app.FoodLogCardView = Backbone.View.extend({
         this.tables = {};
         for (let i = 0; i < app.MEAL_TIMES.length; i++) {
             const key = app.camelize(app.MEAL_TIMES[i]);
-            this.$el.append(tableTemplate({ 'mealTime': app.MEAL_TIMES[i], 'camelizedMealTime': key }));
+            this.$el.append(tableTemplate({ mealTime: app.MEAL_TIMES[i], camelizedMealTime: key }));
             this.tables[key] = {
-                table: this.$('#' + key + 'Table'),
-                body:  this.$('#' + key + 'TableBody')
+                table: this.$(`#${key}Table`),
+                body:  this.$(`#${key}TableBody`)
             };
         }
     },
 
-    addItem: function (foodItem) {
+    addItem(foodItem) {
         const refs = this.tables[app.camelize(foodItem.get('time'))];
         if (!refs) return; // guard against an unrecognised meal time
         const view = new app.FoodLogItemView({ model: foodItem });
@@ -29,7 +28,7 @@ app.FoodLogCardView = Backbone.View.extend({
         refs.body.append(view.render().el);
     },
 
-    hideTableIfEmpty: function (model) {
+    hideTableIfEmpty(model) {
         const refs = this.tables[app.camelize(model.get('time'))];
         if (!refs) return; // guard against an unrecognised meal time
         if (refs.body.children().length === 0) refs.table.hide();
