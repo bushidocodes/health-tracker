@@ -11,16 +11,16 @@ app.FoodLogCardView = Backbone.View.extend({
 
         // Render the foodLogTableTemplates
         var tableTemplate = _.template($('#foodLogTableTemplate').html());
-        for (var i = 0; i < MEAL_TIMES.length; i++) {
-            var html = tableTemplate({ 'mealTime': MEAL_TIMES[i], 'camelizedMealTime': camelize(MEAL_TIMES[i]) });
+        for (var i = 0; i < app.MEAL_TIMES.length; i++) {
+            var html = tableTemplate({ 'mealTime': app.MEAL_TIMES[i], 'camelizedMealTime': app.camelize(app.MEAL_TIMES[i]) });
             $('#foodLogCard').append(html);
         }
 
         // Build a lookup keyed by camelized meal time so addItem and
-        // hideTableIfEmpty work for any MEAL_TIMES entry without a switch.
+        // hideTableIfEmpty work for any app.MEAL_TIMES entry without a switch.
         this.tables = {};
-        for (var i = 0; i < MEAL_TIMES.length; i++) {
-            var key = camelize(MEAL_TIMES[i]);
+        for (var i = 0; i < app.MEAL_TIMES.length; i++) {
+            var key = app.camelize(app.MEAL_TIMES[i]);
             this.tables[key] = {
                 table: $('#' + key + 'Table'),
                 body:  $('#' + key + 'TableBody')
@@ -29,14 +29,14 @@ app.FoodLogCardView = Backbone.View.extend({
     },
 
     addItem: function (foodItem) {
-        var refs = this.tables[camelize(foodItem.get('time'))];
+        var refs = this.tables[app.camelize(foodItem.get('time'))];
         var view = new app.FoodLogItemView({ model: foodItem });
         refs.table.show();
         refs.body.append(view.render().el);
     },
 
     hideTableIfEmpty: function (model) {
-        var refs = this.tables[camelize(model.get('time'))];
+        var refs = this.tables[app.camelize(model.get('time'))];
         if (refs.body.children().length === 0) refs.table.hide();
     }
 });
