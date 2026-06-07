@@ -70,7 +70,8 @@ app.InputFoodCardView = Backbone.View.extend({
         this.typeaheadCtrl = $('#inputFood').typeahead(null, {
             name: 'food-items',
             displayKey: function (data) {
-                return data.brand_name + ' ' + data.item_name + ' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit;
+                var brand = data.brand_name ? data.brand_name + ' ' : '';
+                return brand + data.item_name + ' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit;
             },
             source: app.engine,
             templates: {
