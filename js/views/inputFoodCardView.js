@@ -51,7 +51,6 @@ app.InputFoodCardView = Backbone.View.extend({
                             return n.nutrientId === 1008;
                         })[0];
                         return {
-                            item_id: food.fdcId,
                             brand_name: food.brandOwner || food.brandName || '',
                             item_name: food.description || '',
                             nf_serving_size_unit: food.servingSizeUnit || 'serving',
@@ -78,11 +77,7 @@ app.InputFoodCardView = Backbone.View.extend({
             },
             source: app.engine,
             templates: {
-                empty: [
-                    '<div class="empty-message">',
-                    'unable to find any food items that match the current query',
-                    '</div>'
-                ].join('\n'),
+                empty: '<div class="empty-message">unable to find any food items that match the current query</div>',
                 suggestion: function (data) {
                     var label = data.brand_name ? data.brand_name + ' ' + data.item_name : data.item_name;
                     return $('<div>').append(

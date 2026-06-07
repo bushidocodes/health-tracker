@@ -43,7 +43,9 @@ app.ExportImportView = Backbone.View.extend({
                     });
                     imported++;
                 });
-                $('body').prepend('<div class="alert alert-success alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Imported ' + imported + ' food item(s).</div>');
+                var successAlert = $('<div class="alert alert-success alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><span class="msg"></span></div>');
+                successAlert.find('.msg').text('Imported ' + imported + ' food item(s).');
+                $('body').prepend(successAlert);
             } catch (err) {
                 var errAlert = $('<div class="alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Import failed:</strong> <span class="err-msg"></span></div>');
                 errAlert.find('.err-msg').text(err.message);
