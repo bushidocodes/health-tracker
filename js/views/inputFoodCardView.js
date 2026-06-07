@@ -13,6 +13,8 @@ app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
     events: {
         'keyup #inputFood': 'resetInputFoodBuffer',
+        'keydown #inputAmount': 'submitOnEnter',
+        'keydown #inputTime': 'submitOnEnter',
         'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
@@ -172,9 +174,10 @@ app.InputFoodCardView = Backbone.View.extend({
     // TODO: If the user hits enter when the #inputTime field is active, validate that the value is a positive integer and then shift
     // focus to $('#inputTime)
 
-    // resentInputFoodBuffer() is used to make sure that the buffer is cleared if the user selects a foodItem, but then
-    // reselectes the textField prior to form submission. The tab or enter keys are ignored because they may be hit when the
-    // user is tabbing through the form.
+    submitOnEnter: function (e) {
+        if (e.keyCode === ENTER_KEY) this.createFoodItem();
+    },
+
     resetInputFoodBuffer: function (e) {
 
         // if user rapidly types backspace until field is clear while async request was in progress, spinner gif will run indefinitely. This fixes the bug
