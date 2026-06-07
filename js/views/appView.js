@@ -11,14 +11,16 @@ app.AppView = Backbone.View.extend({
         this.dailyTotalsCard = $('#dailyTotalsCard');
         this.foodLogCard = $('#foodLogCard');
 
-        // configure listeners for when a foodItem is added to the collection
-        this.listenTo(app.foodItems, 'add', this.render);
+        this.listenTo(app.foodItems, 'add remove', this.render);
     },
 
     render: function () {
         if (app.foodItems.length) {
             this.dailyTotalsCard.show();
             this.foodLogCard.show();
+        } else {
+            this.dailyTotalsCard.hide();
+            this.foodLogCard.hide();
         }
     }
 });
