@@ -11,67 +11,72 @@
 </head>
 
 <body>
+    <a class="sr-only sr-only-focusable" href="#mainContent">Skip to main content</a>
     <div class="container-fluid">
-        <div class="row">
-            <div class="col-sm-12">
-                <h1 class="text-center">Health Tracker</h1>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card card-body" id="inputFoodCard">
-                    <h2>Enter Foods</h2>
-                    <form>
-                        <fieldset class="form-group">
-                            <label for="inputFood">What did you eat?</label>
-                            <input type="text" class="form-control" id="inputFood" placeholder="" autocomplete="off">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="inputAmount">How much?</label>
-                            <input type="text" class="form-control" id="inputAmount">
-                        </fieldset>
-                        <fieldset class="form-group">
-                            <label for="inputTime">When?</label>
-                            <select class="form-control" id="inputTime">
-                                <!-- Times defined in MEAL_TIMES are dynamically added here-->
-   	                        </select>
-                        </fieldset>
-                        <!-- Overridding Button Type to Prevent Page Loads-->
-                        <button type="button" class="btn btn-primary" id="inputFoodSubmit">Submit</button>
-                    </form>
+        <header>
+            <div class="row">
+                <div class="col-sm-12">
+                    <h1 class="text-center">Health Tracker</h1>
                 </div>
             </div>
-        </div>
-
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card card-body" id="dailyTotalsCard" style="display: none">
-                    <h2>Daily Totals</h2>
-                    <p>Calories: <span id="numCals"></span></p>
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card card-body" id="foodLogCard" style="display: none">
-                    <h2>Food Log</h2>
-                    <!-- Tables for each item in MEAL_TIMES are dynamically added here-->
-                    <!-- Models in foodItems Collections are then added to the appropriate table -->
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card card-body" id="exportImportCard">
-                    <h2>Backup &amp; Restore</h2>
-                    <div class="d-flex align-items-center flex-wrap" style="gap: 0.5rem;">
-                        <button type="button" class="btn btn-outline-secondary" id="exportBtn">Export JSON</button>
-                        <label class="btn btn-outline-secondary mb-0" for="importFile">Import JSON</label>
-                        <input type="file" id="importFile" accept=".json,application/json" class="sr-only">
+        </header>
+        <main id="mainContent">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-body" id="inputFoodCard">
+                        <h2>Enter Foods</h2>
+                        <form>
+                            <fieldset class="form-group">
+                                <label for="inputFood">What did you eat?</label>
+                                <input type="text" class="form-control" id="inputFood" placeholder="" autocomplete="off">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="inputAmount">How much?</label>
+                                <input type="text" class="form-control" id="inputAmount" inputmode="decimal">
+                            </fieldset>
+                            <fieldset class="form-group">
+                                <label for="inputTime">When?</label>
+                                <select class="form-control" id="inputTime">
+                                    <!-- Times defined in app.MEAL_TIMES are dynamically added here-->
+                                </select>
+                            </fieldset>
+                            <!-- Overriding Button Type to Prevent Page Loads-->
+                            <button type="button" class="btn btn-primary" id="inputFoodSubmit">Submit</button>
+                        </form>
                     </div>
                 </div>
             </div>
-        </div>
+
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-body" id="dailyTotalsCard" style="display: none">
+                        <h2>Daily Totals</h2>
+                        <p>Calories: <span id="numCals"></span></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-body" id="foodLogCard" style="display: none">
+                        <h2>Food Log</h2>
+                        <!-- Tables for each item in app.MEAL_TIMES are dynamically added here-->
+                        <!-- Models in foodItems Collections are then added to the appropriate table -->
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card card-body" id="exportImportCard">
+                        <h2>Backup &amp; Restore</h2>
+                        <div class="d-flex align-items-center flex-wrap" style="gap: 0.5rem;">
+                            <button type="button" class="btn btn-outline-secondary" id="exportBtn">Export JSON</button>
+                            <label class="btn btn-outline-secondary mb-0" for="importFile">Import JSON</label>
+                            <input type="file" id="importFile" accept=".json,application/json" class="sr-only">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
         <div class="row">
             <div class="col-sm-12">
                 <footer class="info">
@@ -87,7 +92,7 @@
         <td><%= brandName ? _.escape(brandName) + ' ' + _.escape(itemName) : _.escape(itemName) %></td>
         <td><%- amount %></td>
         <td><%- calories %></td>
-        <td><button class="destroy">Delete</button></td>
+        <td><button class="destroy" aria-label="Delete <%- brandName ? brandName + ' ' : '' %><%- itemName %>">Delete</button></td>
     </script>
 
     <script type="text/template" id="inputMealTimeSelectorOptionTemplate">
