@@ -11,9 +11,10 @@ app.ExportImportView = Backbone.View.extend({
         var data = JSON.stringify(app.foodItems.toJSON(), null, 2);
         var blob = new Blob([data], { type: 'application/json' });
         var url = URL.createObjectURL(blob);
+        var date = new Date().toISOString().slice(0, 10); // YYYY-MM-DD
         var a = document.createElement('a');
         a.href = url;
-        a.download = 'health-tracker-export.json';
+        a.download = 'health-tracker-' + date + '.json';
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -42,7 +43,9 @@ app.ExportImportView = Backbone.View.extend({
                 });
                 $('body').prepend('<div class="alert alert-success alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>Imported ' + imported + ' food item(s).</div>');
             } catch (err) {
-                $('body').prepend('<div class="alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Import failed:</strong> ' + err.message + '</div>');
+                var errAlert = $('<div class="alert alert-danger alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Import failed:</strong> <span class="err-msg"></span></div>');
+                errAlert.find('.err-msg').text(err.message);
+                $('body').prepend(errAlert);
             }
             self.$('#importFile').val('');
         };
