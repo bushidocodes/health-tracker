@@ -13,6 +13,8 @@ app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
     events: {
         'keyup #inputFood': 'resetInputFoodBuffer',
+        'keydown #inputAmount': 'submitOnEnter',
+        'keydown #inputTime': 'submitOnEnter',
         'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
@@ -22,8 +24,8 @@ app.InputFoodCardView = Backbone.View.extend({
 
         // Initialize inputMealTimeSelectorOptionTemplate
         var inputMealTimeSelectorOptionTemplate = _.template($('#inputMealTimeSelectorOptionTemplate').html());
-        for (var i = 0; i < MEAL_TIMES.length; i++) {
-            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': MEAL_TIMES[i] });
+        for (var i = 0; i < app.MEAL_TIMES.length; i++) {
+            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': app.MEAL_TIMES[i] });
             this.$inputTime.append(html);
         };
 
@@ -110,7 +112,7 @@ app.InputFoodCardView = Backbone.View.extend({
         return {
             brandName: app.inputFood.brand_name,
             itemName: app.inputFood.item_name,
-            amount: this.$inputAmount.val().trim(),
+            amount: parseFloat(this.$inputAmount.val().trim()),
             time: this.$inputTime.val().trim(),
             calories: Math.round(app.inputFood.nf_calories * this.$inputAmount.val().trim())
         };
@@ -150,7 +152,6 @@ app.InputFoodCardView = Backbone.View.extend({
                 app.inputFood = null;
                 self.$inputFood.val('');
                 self.$inputAmount.val('');
-                self.$inputTime.val(MEAL_TIMES[0]);
                 $('.alert').alert('close');
             }
         });
@@ -165,6 +166,10 @@ app.InputFoodCardView = Backbone.View.extend({
         $('#inputAmount').focus();
     },
 
+    submitOnEnter: function (e) {
+        if (e.keyCode === app.ENTER_KEY) this.createFoodItem();
+    },
+
     resetInputFoodBuffer: function (e) {
 
         // if user rapidly types backspace until field is clear while async request was in progress, spinner gif will run indefinitely. This fixes the bug
@@ -175,7 +180,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // Only clear the textfield and buffer if a food item was saved to the buffer
         if (app.inputFood) {
             // Only clear the textfield and buffer if the user hits a key other than enter or tab while the textField is selected
-            if (e.keyCode !== ENTER_KEY && e.keyCode !== TAB_KEY) {
+            if (e.keyCode !== app.ENTER_KEY && e.keyCode !== app.TAB_KEY) {
                 app.inputFood = null;
                 this.$inputFood.val('');
             }
