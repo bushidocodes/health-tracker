@@ -42,6 +42,8 @@ app.InputFoodCardView = Backbone.View.extend({
             remote: {
                 url: 'https://api.nal.usda.gov/fdc/v1/foods/search?query=%QUERY&api_key=' + USDA_API_KEY + '&pageSize=20',
                 wildcard: '%QUERY',
+                rateLimitWait: 300,
+                rateLimitBy: 'debounce',
                 filter: function (response) {
                     return $.map(response.foods || [], function (food) {
                         var energyNutrient = $.grep(food.foodNutrients || [], function (n) {
@@ -116,7 +118,7 @@ app.InputFoodCardView = Backbone.View.extend({
         };
     },
 
-    // createFoodItem(event) performs basic form validation and, if passed, adds a new foodItem to the foodItems collection. It them resets the form fields.
+    // createFoodItem(event) performs basic form validation and, if passed, adds a new foodItem to the foodItems collection. It then resets the form fields.
     createFoodItem: function () {
         // Clear any old error messages
         $('.alert').alert('close');
@@ -144,7 +146,9 @@ app.InputFoodCardView = Backbone.View.extend({
         // create a new foodItem
         app.foodItems.create(this.newAttributes(), {
             error: function (model, response) {
-                $('body').prepend('<div class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> We were unable to log your ' + model.get('itemName') + '. Change a few things up and try submitting again.</div>');
+                var msg = $('<div class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> We were unable to log your <span class="item-name"></span>. Change a few things up and try submitting again.</div>');
+                msg.find('.item-name').text(model.get('itemName'));
+                $('body').prepend(msg);
             },
             success: function (model, response) {
                 app.inputFood = null;

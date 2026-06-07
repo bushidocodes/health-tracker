@@ -24,7 +24,7 @@ th:nth-of-type(4) {
 
 
 
-/* Typeahead Styles extracted from Twitter's samples on GitHub and commented out to preserve default Bootstrap textfield styles*/
+/* Typeahead Styles — extracted from Twitter's typeahead.js samples and adapted for Bootstrap 4 */
 
 .twitter-typeahead {
     width: 100%;
@@ -63,5 +63,5 @@ th:nth-of-type(4) {
 
 .empty-message {
   padding: 5px 10px;
- text-align: center;
+  text-align: center;
 }
