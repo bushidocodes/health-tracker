@@ -23,6 +23,7 @@ app.FoodLogCardView = Backbone.View.extend({
 
     addItem: function (foodItem) {
         var refs = this.tables[app.camelize(foodItem.get('time'))];
+        if (!refs) return; // guard against an unrecognised meal time
         var view = new app.FoodLogItemView({ model: foodItem });
         refs.table.show();
         refs.body.append(view.render().el);
@@ -30,6 +31,7 @@ app.FoodLogCardView = Backbone.View.extend({
 
     hideTableIfEmpty: function (model) {
         var refs = this.tables[app.camelize(model.get('time'))];
+        if (!refs) return; // guard against an unrecognised meal time
         if (refs.body.children().length === 0) refs.table.hide();
     }
 });
