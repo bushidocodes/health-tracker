@@ -62,6 +62,18 @@
         </div>
         <div class="row">
             <div class="col-sm-12">
+                <div class="card card-body" id="exportImportCard">
+                    <h2>Backup &amp; Restore</h2>
+                    <div class="d-flex align-items-center flex-wrap" style="gap: 0.5rem;">
+                        <button type="button" class="btn btn-outline-secondary" id="exportBtn">Export JSON</button>
+                        <label class="btn btn-outline-secondary mb-0" for="importFile">Import JSON</label>
+                        <input type="file" id="importFile" accept=".json,application/json" class="sr-only">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
                 <footer class="info">
                     <div class="text-center">Written by <a href="https://github.com/bushidocodes">Sean McBride</a> using jQuery, Bootstrap 4, Typeahead, Underscore, Backbone, and the USDA FoodData Central API</div>
                 </footer>
@@ -114,6 +126,7 @@
     <script src="js/views/dailyTotalsCardView.js"></script>
     <script src="js/views/foodLogCardView.js"></script>
     <script src="js/views/foodLogItemView.js"></script>
+    <script src="js/views/exportImportView.js"></script>
     <script src="js/app.js"></script>
 </body>
 

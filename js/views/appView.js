@@ -8,6 +8,7 @@ app.AppView = Backbone.View.extend({
         new app.InputFoodCardView();
         new app.DailyTotalsCardView();
         new app.FoodLogCardView();
+        new app.ExportImportView();
         this.dailyTotalsCard = $('#dailyTotalsCard');
         this.foodLogCard = $('#foodLogCard');
 
