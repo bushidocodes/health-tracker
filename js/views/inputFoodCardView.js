@@ -130,7 +130,6 @@ app.InputFoodCardView = Backbone.View.extend({
             } else if (!app.inputFood) {
                 errorMsg = "Food Item has not been selected. Select to Continue";
                 this.$inputFood.focus();
-                //$.isNumeric($('#inputAmount').val())
             } else if (!$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0)) {
                 errorMsg = "Amount field is not a positive number. Enter to Continue";
                 this.$inputAmount.focus();
@@ -166,15 +165,6 @@ app.InputFoodCardView = Backbone.View.extend({
         $('#inputAmount').focus();
     },
 
-    // TODO: If the user hits enter when the #inputAmount field is active, validate that the value is a positive integer and then shift
-    // focus to $('#inputTime)
-
-    // TODO: If the user hits enter when the #inputTime field is active, validate that the value is a positive integer and then shift
-    // focus to $('#inputTime)
-
-    // resentInputFoodBuffer() is used to make sure that the buffer is cleared if the user selects a foodItem, but then
-    // reselectes the textField prior to form submission. The tab or enter keys are ignored because they may be hit when the
-    // user is tabbing through the form.
     resetInputFoodBuffer: function (e) {
 
         // if user rapidly types backspace until field is clear while async request was in progress, spinner gif will run indefinitely. This fixes the bug

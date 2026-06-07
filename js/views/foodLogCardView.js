@@ -9,18 +9,11 @@ app.FoodLogCardView = Backbone.View.extend({
         this.listenTo(app.foodItems, 'add', this.addItem);
         this.listenTo(app.foodItems, 'remove', this.hideTableIfEmpty);
 
-        // Render the foodLogTableTemplates
         var tableTemplate = _.template($('#foodLogTableTemplate').html());
-        for (var i = 0; i < MEAL_TIMES.length; i++) {
-            var html = tableTemplate({ 'mealTime': MEAL_TIMES[i], 'camelizedMealTime': camelize(MEAL_TIMES[i]) });
-            $('#foodLogCard').append(html);
-        }
-
-        // Build a lookup keyed by camelized meal time so addItem and
-        // hideTableIfEmpty work for any MEAL_TIMES entry without a switch.
         this.tables = {};
         for (var i = 0; i < MEAL_TIMES.length; i++) {
             var key = camelize(MEAL_TIMES[i]);
+            $('#foodLogCard').append(tableTemplate({ 'mealTime': MEAL_TIMES[i], 'camelizedMealTime': key }));
             this.tables[key] = {
                 table: $('#' + key + 'Table'),
                 body:  $('#' + key + 'TableBody')
