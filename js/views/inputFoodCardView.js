@@ -39,10 +39,6 @@ app.InputFoodCardView = Backbone.View.extend({
                 return Bloodhound.tokenizers.whitespace(datum.brand_name + ' ' + datum.item_name);
             },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: {
-                url: 'https://api.nal.usda.gov/fdc/v1/foods/search?query=apple&api_key=' + USDA_API_KEY + '&pageSize=20',
-                cache: false
-            },
             remote: {
                 url: 'https://api.nal.usda.gov/fdc/v1/foods/search?query=%QUERY&api_key=' + USDA_API_KEY + '&pageSize=20',
                 wildcard: '%QUERY',
