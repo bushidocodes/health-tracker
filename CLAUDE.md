@@ -58,7 +58,8 @@ index.html (main entry point, loads all JS files and templates)
 - `app.foodItems`: Global Backbone collection holding all FoodItem models for the current day
 - `app.inputFood`: Buffer holding the selected typeahead suggestion between selection and form submission
 - `app.engine`: Global Bloodhound instance for caching and querying USDA FoodData Central API results
-- `MEAL_TIMES`: Array of six meal periods (Breakfast, Morning Snack, Lunch, Afternoon Snack, Dinner, After Dinner) used throughout the app
+- `app.MEAL_TIMES`: Array of six meal periods (Breakfast, Morning Snack, Lunch, Afternoon Snack, Dinner, After Dinner) used throughout the app
+- `app.IGNORED_KEYS`: Array of keyCodes (navigation, modifier, function keys) that should not clear the typeahead buffer on keyup
 
 ### File Organization
 
