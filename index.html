@@ -84,7 +84,7 @@
 
     <!--Underscore Micro-templates-->
     <script type="text/template" id="foodLogItemTemplate">
-        <td><%- brandName %> <%- itemName %></td>
+        <td><%= brandName ? _.escape(brandName) + ' ' + _.escape(itemName) : _.escape(itemName) %></td>
         <td><%- amount %></td>
         <td><%- calories %></td>
         <td><button class="destroy">Delete</button></td>
