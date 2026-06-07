@@ -83,8 +83,9 @@ app.InputFoodCardView = Backbone.View.extend({
                     '</div>'
                 ].join('\n'),
                 suggestion: function (data) {
+                    var label = data.brand_name ? data.brand_name + ' ' + data.item_name : data.item_name;
                     return $('<div>').append(
-                        $('<strong>').text((data.brand_name || '') + ' ' + (data.item_name || ''))
+                        $('<strong>').text(label)
                     ).append(
                         $('<span>').text(' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit)
                     ).prop('outerHTML');
