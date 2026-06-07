@@ -32,10 +32,11 @@ app.ExportImportView = Backbone.View.extend({
                 if (!Array.isArray(items)) throw new Error('Expected a JSON array');
                 var imported = 0;
                 items.forEach(function (item) {
+                    if (!item.itemName) return; // skip entries with no food name
                     var time = app.MEAL_TIMES.indexOf(item.time) !== -1 ? item.time : app.MEAL_TIMES[0];
                     app.foodItems.create({
                         brandName: item.brandName || '',
-                        itemName:  item.itemName  || '',
+                        itemName:  item.itemName,
                         amount:    typeof item.amount === 'number' ? item.amount : parseFloat(item.amount) || 0,
                         time:      time,
                         calories:  typeof item.calories === 'number' ? item.calories : parseInt(item.calories) || 0

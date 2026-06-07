@@ -24,4 +24,4 @@ $(function() {
     new app.AppView();
     // Load the collection from persistent storage
     app.foodItems.fetch();
-})
+});
