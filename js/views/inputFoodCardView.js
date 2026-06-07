@@ -18,9 +18,10 @@ app.InputFoodCardView = Backbone.View.extend({
         'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
-        this.$inputFood = $('#inputFood');
-        this.$inputAmount = $('#inputAmount');
-        this.$inputTime = $('#inputTime');
+        var self = this;
+        this.$inputFood = this.$('#inputFood');
+        this.$inputAmount = this.$('#inputAmount');
+        this.$inputTime = this.$('#inputTime');
 
         // Initialize inputMealTimeSelectorOptionTemplate
         var inputMealTimeSelectorOptionTemplate = _.template($('#inputMealTimeSelectorOptionTemplate').html());
@@ -65,7 +66,7 @@ app.InputFoodCardView = Backbone.View.extend({
         var promise = app.engine.initialize();
         promise.fail(function () {
             $('body').prepend('<div class="alert alert-danger text-center" role="alert"><strong>USDA FoodData Central is not responding</strong></div>');
-            $('#inputFoodSubmit').prop("disabled", true);
+            self.$('#inputFoodSubmit').prop("disabled", true);
         });
 
         // Make the inputFood text field a typeahead that uses the results from the Bloodhound suggestion engine at app.engine
@@ -101,8 +102,8 @@ app.InputFoodCardView = Backbone.View.extend({
             $('.tt-input').css('cursor', '');
         });
 
-        this.$inputFood.on('typeahead:select', this.selectTypeahead);
-        this.$inputFood.on('typeahead:autocomplete', this.selectTypeahead);
+        this.$inputFood.on('typeahead:select', this.selectTypeahead.bind(this));
+        this.$inputFood.on('typeahead:autocomplete', this.selectTypeahead.bind(this));
     },
     // newAttributes() retrieves data from the form and from the app.inputFood buffer and creates an object ready to be passed to app.foodItems.create();
     newAttributes: function () {
@@ -161,7 +162,7 @@ app.InputFoodCardView = Backbone.View.extend({
     // selectTypeahead() saves the filtered Bloodhound suggestionObject to app.inputFood buffer until form submission.
     selectTypeahead: function (event, suggestionObject) {
         app.inputFood = suggestionObject;
-        $('#inputAmount').focus();
+        this.$inputAmount.focus();
     },
 
     submitOnEnter: function (e) {

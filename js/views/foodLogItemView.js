@@ -8,7 +8,7 @@ app.FoodLogItemView = Backbone.View.extend({
     // Each foodLogItem is displayed as a row item in the foodLogCard table
     tagName: 'tr',
     events: {
-        'click .destroy': 'clear' //call clear when button.destroy is clicked
+        'click .destroy': 'clear' // call clear when button.destroy is clicked
     },
 
     // use the item-template Underscore microtemplate to render as HTML
