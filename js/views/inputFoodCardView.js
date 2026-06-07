@@ -18,22 +18,22 @@ app.InputFoodCardView = Backbone.View.extend({
         'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
-        var self = this;
+        const self = this;
         this.$inputFood = this.$('#inputFood');
         this.$inputAmount = this.$('#inputAmount');
         this.$inputTime = this.$('#inputTime');
 
         // Initialize inputMealTimeSelectorOptionTemplate
-        var inputMealTimeSelectorOptionTemplate = _.template($('#inputMealTimeSelectorOptionTemplate').html());
-        for (var i = 0; i < app.MEAL_TIMES.length; i++) {
-            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': app.MEAL_TIMES[i] });
+        const inputMealTimeSelectorOptionTemplate = _.template($('#inputMealTimeSelectorOptionTemplate').html());
+        for (let i = 0; i < app.MEAL_TIMES.length; i++) {
+            const html = inputMealTimeSelectorOptionTemplate({ 'mealTime': app.MEAL_TIMES[i] });
             this.$inputTime.append(html);
         }
 
 
         // Initialize a bloodhound suggestion engine with the USDA FoodData Central search API
         // DEMO_KEY: 30 req/hour, 50 req/day. Register at https://fdc.nal.usda.gov/api-key-signup.html for higher limits.
-        var USDA_API_KEY = 'DEMO_KEY';
+        const USDA_API_KEY = 'DEMO_KEY';
         app.engine = new Bloodhound({
             initialize: false,
             datumTokenizer: function (datum) {
@@ -47,7 +47,7 @@ app.InputFoodCardView = Backbone.View.extend({
                 rateLimitBy: 'debounce',
                 filter: function (response) {
                     return $.map(response.foods || [], function (food) {
-                        var energyNutrient = $.grep(food.foodNutrients || [], function (n) {
+                        const energyNutrient = $.grep(food.foodNutrients || [], function (n) {
                             return n.nutrientId === 1008;
                         })[0];
                         return {
@@ -62,24 +62,24 @@ app.InputFoodCardView = Backbone.View.extend({
             }
         });
 
-        var promise = app.engine.initialize();
+        const promise = app.engine.initialize();
         promise.fail(function () {
             $('body').prepend('<div class="alert alert-danger text-center" role="alert"><strong>USDA FoodData Central is not responding</strong></div>');
             self.$('#inputFoodSubmit').prop("disabled", true);
         });
 
         // Make the inputFood text field a typeahead that uses the results from the Bloodhound suggestion engine at app.engine
-        var typeaheadCtrl = this.$inputFood.typeahead(null, {
+        const typeaheadCtrl = this.$inputFood.typeahead(null, {
             name: 'food-items',
             displayKey: function (data) {
-                var brand = data.brand_name ? data.brand_name + ' ' : '';
+                const brand = data.brand_name ? data.brand_name + ' ' : '';
                 return brand + data.item_name + ' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit;
             },
             source: app.engine,
             templates: {
                 empty: '<div class="empty-message">unable to find any food items that match the current query</div>',
                 suggestion: function (data) {
-                    var label = data.brand_name ? data.brand_name + ' ' + data.item_name : data.item_name;
+                    const label = data.brand_name ? data.brand_name + ' ' + data.item_name : data.item_name;
                     return $('<div>').append(
                         $('<strong>').text(label)
                     ).append(
@@ -102,7 +102,7 @@ app.InputFoodCardView = Backbone.View.extend({
     },
     // newAttributes() retrieves data from the form and from the app.inputFood buffer and creates an object ready to be passed to app.foodItems.create();
     newAttributes: function () {
-        var amount = parseFloat(this.$inputAmount.val().trim());
+        const amount = parseFloat(this.$inputAmount.val().trim());
         return {
             brandName: app.inputFood.brand_name,
             itemName: app.inputFood.item_name,
@@ -117,10 +117,10 @@ app.InputFoodCardView = Backbone.View.extend({
         // Clear any old error messages
         $('.alert').alert('close');
 
-        var amountStr = this.$inputAmount.val().trim();
-        var amountValid = $.isNumeric(amountStr) && Number(amountStr) > 0;
+        const amountStr = this.$inputAmount.val().trim();
+        const amountValid = $.isNumeric(amountStr) && Number(amountStr) > 0;
         if (!app.inputFood || !amountValid) {
-            var errorMsg = "";
+            let errorMsg = "";
             if (!app.inputFood && !amountValid) {
                 errorMsg = "Food Item has not been selected from the search and amount field is not a positive number. Correct to resubmit";
                 this.$inputFood.focus();
@@ -136,12 +136,12 @@ app.InputFoodCardView = Backbone.View.extend({
         }
 
         // save this to self to use in callback
-        var self = this;
+        const self = this;
 
         // create a new foodItem
         app.foodItems.create(this.newAttributes(), {
             error: function (model, response) {
-                var msg = $('<div class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> We were unable to log your <span class="item-name"></span>. Change a few things up and try submitting again.</div>');
+                const msg = $('<div class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> We were unable to log your <span class="item-name"></span>. Change a few things up and try submitting again.</div>');
                 msg.find('.item-name').text(model.get('itemName'));
                 $('body').prepend(msg);
             },
@@ -170,7 +170,7 @@ app.InputFoodCardView = Backbone.View.extend({
         }
 
         if (app.inputFood) {
-            var isFunctionKey = e.keyCode >= 112 && e.keyCode <= 123;
+            const isFunctionKey = e.keyCode >= 112 && e.keyCode <= 123;
             if (app.IGNORED_KEYS.indexOf(e.keyCode) === -1 && !isFunctionKey) {
                 app.inputFood = null;
                 this.$inputFood.val('');
