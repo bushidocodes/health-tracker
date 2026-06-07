@@ -24,8 +24,8 @@ app.InputFoodCardView = Backbone.View.extend({
 
         // Initialize inputMealTimeSelectorOptionTemplate
         var inputMealTimeSelectorOptionTemplate = _.template($('#inputMealTimeSelectorOptionTemplate').html());
-        for (var i = 0; i < MEAL_TIMES.length; i++) {
-            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': MEAL_TIMES[i] });
+        for (var i = 0; i < app.MEAL_TIMES.length; i++) {
+            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': app.MEAL_TIMES[i] });
             this.$inputTime.append(html);
         };
 
@@ -174,7 +174,7 @@ app.InputFoodCardView = Backbone.View.extend({
     // focus to $('#inputTime)
 
     submitOnEnter: function (e) {
-        if (e.keyCode === ENTER_KEY) this.createFoodItem();
+        if (e.keyCode === app.ENTER_KEY) this.createFoodItem();
     },
 
     resetInputFoodBuffer: function (e) {
@@ -187,7 +187,7 @@ app.InputFoodCardView = Backbone.View.extend({
         // Only clear the textfield and buffer if a food item was saved to the buffer
         if (app.inputFood) {
             // Only clear the textfield and buffer if the user hits a key other than enter or tab while the textField is selected
-            if (e.keyCode !== ENTER_KEY && e.keyCode !== TAB_KEY) {
+            if (e.keyCode !== app.ENTER_KEY && e.keyCode !== app.TAB_KEY) {
                 app.inputFood = null;
                 this.$inputFood.val('');
             }

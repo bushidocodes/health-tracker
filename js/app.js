@@ -4,18 +4,18 @@
 // Declare app if not declared
 var app = app || {};
 
-// Variables
-var ENTER_KEY = 13;
-var TAB_KEY = 9;
-var MEAL_TIMES = ['Breakfast','Morning Snack','Lunch','Afternoon Snack','Dinner','After Dinner']
+// Constants
+app.ENTER_KEY = 13;
+app.TAB_KEY = 9;
+app.MEAL_TIMES = ['Breakfast','Morning Snack','Lunch','Afternoon Snack','Dinner','After Dinner'];
 
 // Helper Functions
-function camelize(str) {
+app.camelize = function camelize(str) {
   return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, function(match, index) {
-    if (+match === 0) return ""; // or if (/\s+/.test(match)) for white spaces
+    if (+match === 0) return "";
     return index == 0 ? match.toLowerCase() : match.toUpperCase();
   });
-}
+};
 
 $(function() {
     // Cascade the creation of App Views
