@@ -5,7 +5,7 @@ var app = app || {};
 
 app.AppView = Backbone.View.extend({
     el: 'body',
-    initialize: function () {
+    initialize() {
         new app.InputFoodCardView();
         new app.DailyTotalsCardView();
         new app.FoodLogCardView();
@@ -16,7 +16,7 @@ app.AppView = Backbone.View.extend({
         this.listenTo(app.foodItems, 'add remove', this.render);
     },
 
-    render: function () {
+    render() {
         if (app.foodItems.length) {
             this.dailyTotalsCard.show();
             this.foodLogCard.show();
