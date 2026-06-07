@@ -168,16 +168,14 @@ app.InputFoodCardView = Backbone.View.extend({
     },
 
     resetInputFoodBuffer: function (e) {
-
-        // if user rapidly types backspace until field is clear while async request was in progress, spinner gif will run indefinitely. This fixes the bug
         if (this.$inputFood.val().length === 0) {
             $('.tt-input').css('background', '');
         }
 
-        // Only clear the textfield and buffer if a food item was saved to the buffer
         if (app.inputFood) {
-            // Only clear the textfield and buffer if the user hits a key other than enter or tab while the textField is selected
-            if (e.keyCode !== app.ENTER_KEY && e.keyCode !== app.TAB_KEY) {
+            var IGNORED_KEYS = [9, 13, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 91, 92, 93];
+            var isFunctionKey = e.keyCode >= 112 && e.keyCode <= 123;
+            if (IGNORED_KEYS.indexOf(e.keyCode) === -1 && !isFunctionKey) {
                 app.inputFood = null;
                 this.$inputFood.val('');
             }
