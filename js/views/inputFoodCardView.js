@@ -27,7 +27,7 @@ app.InputFoodCardView = Backbone.View.extend({
         for (var i = 0; i < app.MEAL_TIMES.length; i++) {
             var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': app.MEAL_TIMES[i] });
             this.$inputTime.append(html);
-        };
+        }
 
 
         // Initialize a bloodhound suggestion engine with the USDA FoodData Central search API
@@ -123,22 +123,23 @@ app.InputFoodCardView = Backbone.View.extend({
         // Clear any old error messages
         $('.alert').alert('close');
 
-        // if either the food item
-        if (!app.inputFood || !$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0)) {
+        var amountStr = this.$inputAmount.val().trim();
+        var amountValid = $.isNumeric(amountStr) && amountStr > 0;
+        if (!app.inputFood || !amountValid) {
             var errorMsg = "";
-            if (!app.inputFood && (!$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0))) {
+            if (!app.inputFood && !amountValid) {
                 errorMsg = "Food Item has not been selected from the search and amount field is not a positive number. Correct to resubmit";
                 this.$inputFood.focus();
             } else if (!app.inputFood) {
                 errorMsg = "Food Item has not been selected. Select to Continue";
                 this.$inputFood.focus();
-            } else if (!$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0)) {
+            } else {
                 errorMsg = "Amount field is not a positive number. Enter to Continue";
                 this.$inputAmount.focus();
             }
             $('body').prepend('<div class="alert alert-warning alert-dismissible fade show" role="alert"><button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button><strong>Oh snap!</strong> ' + errorMsg + '</div>');
             return;
-        };
+        }
 
         // save this to self to use in callback
         var self = this;
