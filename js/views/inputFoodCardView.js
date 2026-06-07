@@ -13,6 +13,8 @@ app.InputFoodCardView = Backbone.View.extend({
     el: '#inputFoodCard',
     events: {
         'keyup #inputFood': 'resetInputFoodBuffer',
+        'keydown #inputAmount': 'submitOnEnter',
+        'keydown #inputTime': 'submitOnEnter',
         'click #inputFoodSubmit': 'createFoodItem'
     },
     initialize: function () {
@@ -22,8 +24,8 @@ app.InputFoodCardView = Backbone.View.extend({
 
         // Initialize inputMealTimeSelectorOptionTemplate
         var inputMealTimeSelectorOptionTemplate = _.template($('#inputMealTimeSelectorOptionTemplate').html());
-        for (var i = 0; i < MEAL_TIMES.length; i++) {
-            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': MEAL_TIMES[i] });
+        for (var i = 0; i < app.MEAL_TIMES.length; i++) {
+            var html = inputMealTimeSelectorOptionTemplate({ 'mealTime': app.MEAL_TIMES[i] });
             this.$inputTime.append(html);
         };
 
@@ -37,10 +39,6 @@ app.InputFoodCardView = Backbone.View.extend({
                 return Bloodhound.tokenizers.whitespace(datum.brand_name + ' ' + datum.item_name);
             },
             queryTokenizer: Bloodhound.tokenizers.whitespace,
-            prefetch: {
-                url: 'https://api.nal.usda.gov/fdc/v1/foods/search?query=apple&api_key=' + USDA_API_KEY + '&pageSize=20',
-                cache: false
-            },
             remote: {
                 url: 'https://api.nal.usda.gov/fdc/v1/foods/search?query=%QUERY&api_key=' + USDA_API_KEY + '&pageSize=20',
                 wildcard: '%QUERY',
@@ -72,7 +70,8 @@ app.InputFoodCardView = Backbone.View.extend({
         this.typeaheadCtrl = $('#inputFood').typeahead(null, {
             name: 'food-items',
             displayKey: function (data) {
-                return data.brand_name + ' ' + data.item_name + ' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit;
+                var brand = data.brand_name ? data.brand_name + ' ' : '';
+                return brand + data.item_name + ' – ' + data.nf_serving_size_qty + ' ' + data.nf_serving_size_unit;
             },
             source: app.engine,
             templates: {
@@ -110,7 +109,7 @@ app.InputFoodCardView = Backbone.View.extend({
         return {
             brandName: app.inputFood.brand_name,
             itemName: app.inputFood.item_name,
-            amount: this.$inputAmount.val().trim(),
+            amount: parseFloat(this.$inputAmount.val().trim()),
             time: this.$inputTime.val().trim(),
             calories: Math.round(app.inputFood.nf_calories * this.$inputAmount.val().trim())
         };
@@ -130,7 +129,6 @@ app.InputFoodCardView = Backbone.View.extend({
             } else if (!app.inputFood) {
                 errorMsg = "Food Item has not been selected. Select to Continue";
                 this.$inputFood.focus();
-                //$.isNumeric($('#inputAmount').val())
             } else if (!$.isNumeric(this.$inputAmount.val().trim()) || (this.$inputAmount.val().trim() <= 0)) {
                 errorMsg = "Amount field is not a positive number. Enter to Continue";
                 this.$inputAmount.focus();
@@ -151,7 +149,6 @@ app.InputFoodCardView = Backbone.View.extend({
                 app.inputFood = null;
                 self.$inputFood.val('');
                 self.$inputAmount.val('');
-                self.$inputTime.val(MEAL_TIMES[0]);
                 $('.alert').alert('close');
             }
         });
@@ -166,15 +163,10 @@ app.InputFoodCardView = Backbone.View.extend({
         $('#inputAmount').focus();
     },
 
-    // TODO: If the user hits enter when the #inputAmount field is active, validate that the value is a positive integer and then shift
-    // focus to $('#inputTime)
+    submitOnEnter: function (e) {
+        if (e.keyCode === app.ENTER_KEY) this.createFoodItem();
+    },
 
-    // TODO: If the user hits enter when the #inputTime field is active, validate that the value is a positive integer and then shift
-    // focus to $('#inputTime)
-
-    // resentInputFoodBuffer() is used to make sure that the buffer is cleared if the user selects a foodItem, but then
-    // reselectes the textField prior to form submission. The tab or enter keys are ignored because they may be hit when the
-    // user is tabbing through the form.
     resetInputFoodBuffer: function (e) {
         if (this.$inputFood.val().length === 0) {
             $('.tt-input').css('background', '');
