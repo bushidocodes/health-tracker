@@ -69,7 +69,7 @@ app.InputFoodCardView = Backbone.View.extend({
         });
 
         // Make the inputFood text field a typeahead that uses the results from the Bloodhound suggestion engine at app.engine
-        this.typeaheadCtrl = $('#inputFood').typeahead(null, {
+        var typeaheadCtrl = this.$inputFood.typeahead(null, {
             name: 'food-items',
             displayKey: function (data) {
                 var brand = data.brand_name ? data.brand_name + ' ' : '';
@@ -93,17 +93,14 @@ app.InputFoodCardView = Backbone.View.extend({
             }
         });
 
-        this.typeaheadCtrl.on('typeahead:asyncrequest', function () {
+        typeaheadCtrl.on('typeahead:asyncrequest', function () {
             $('.tt-input').css('cursor', 'wait');
         });
 
-        this.typeaheadCtrl.on('typeahead:asyncreceive', function () {
+        typeaheadCtrl.on('typeahead:asyncreceive', function () {
             $('.tt-input').css('cursor', '');
         });
 
-
-
-        // Create Event Listeners for the special typeahead:select and typeahead:autocomplete events that fire when the end user selects an item from the typeahead menu or auto-complete suggestion. These events trigger selectTypeahead, which saves the selected foot item to app.inputFood until form submission
         this.$inputFood.on('typeahead:select', this.selectTypeahead);
         this.$inputFood.on('typeahead:autocomplete', this.selectTypeahead);
     },
@@ -125,7 +122,7 @@ app.InputFoodCardView = Backbone.View.extend({
         $('.alert').alert('close');
 
         var amountStr = this.$inputAmount.val().trim();
-        var amountValid = $.isNumeric(amountStr) && amountStr > 0;
+        var amountValid = $.isNumeric(amountStr) && Number(amountStr) > 0;
         if (!app.inputFood || !amountValid) {
             var errorMsg = "";
             if (!app.inputFood && !amountValid) {

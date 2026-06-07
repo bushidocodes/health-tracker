@@ -13,10 +13,10 @@ app.FoodLogCardView = Backbone.View.extend({
         this.tables = {};
         for (var i = 0; i < app.MEAL_TIMES.length; i++) {
             var key = app.camelize(app.MEAL_TIMES[i]);
-            $('#foodLogCard').append(tableTemplate({ 'mealTime': app.MEAL_TIMES[i], 'camelizedMealTime': key }));
+            this.$el.append(tableTemplate({ 'mealTime': app.MEAL_TIMES[i], 'camelizedMealTime': key }));
             this.tables[key] = {
-                table: $('#' + key + 'Table'),
-                body:  $('#' + key + 'TableBody')
+                table: this.$('#' + key + 'Table'),
+                body:  this.$('#' + key + 'TableBody')
             };
         }
     },
