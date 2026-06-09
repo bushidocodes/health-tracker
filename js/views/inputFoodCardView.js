@@ -48,7 +48,7 @@ app.InputFoodCardView = Backbone.View.extend({
                         item_name: food.description || '',
                         nf_serving_size_unit: food.servingSizeUnit || 'serving',
                         nf_serving_size_qty: food.servingSize ? Math.round(food.servingSize * 10) / 10 : 1,
-                        nf_calories: energyNutrient ? energyNutrient.value : 0
+                        nf_calories: energyNutrient ? energyNutrient.value ?? 0 : 0
                     };
                 })
             }
