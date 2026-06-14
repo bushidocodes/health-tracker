@@ -1,67 +1,27 @@
+/* Light-DOM globals only: design tokens (which pierce shadow boundaries),
+   a small reset, and the page background. All component styling lives inside
+   each component's shadow root (see js/styles.js and the components). */
+
+:root {
+  --ht-bg: cadetblue;
+  --ht-card-bg: #fff;
+  --ht-text: #212529;
+  --ht-border: #ced4da;
+  --ht-primary: #007bff;
+  --ht-primary-dark: #0069d9;
+  --ht-danger: #dc3545;
+  --ht-radius: 0.25rem;
+
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+}
+
+* {
+  box-sizing: border-box;
+}
+
 body {
-  background-color: cadetblue;
-}
-
-.container-fluid {
-  max-width: 1200px;
-}
-
-th:nth-of-type(1) {
-  width: 70%;
-}
-
-th:nth-of-type(2) {
-  width: 10%;
-}
-
-th:nth-of-type(3) {
-  width: 10%;
-}
-th:nth-of-type(4) {
-  width: 10%;
-}
-
-
-
-
-/* Typeahead Styles — extracted from Twitter's typeahead.js samples and adapted for Bootstrap 4 */
-
-.twitter-typeahead {
-    width: 100%;
-}
-.tt-hint {
-  width: 100%;
-  height: 38px;
-  padding: 8px 12px;
-  line-height: 30px;
-  border: 2px solid #ccc;
-  border-radius: 8px;
-  outline: none;
-}
-
-.tt-hint {
-  color: #999;
-}
-
-.tt-menu {
-  /* UPDATE: newer versions use tt-menu instead of tt-dropdown-menu */
-  width: 100%;
-  margin-top: 12px;
-  padding: 8px 0;
-  background-color: #fff;
-  border: 1px solid #ccc;
-  border: 1px solid rgba(0, 0, 0, 0.2);
-  border-radius: 8px;
-  box-shadow: 0 5px 10px rgba(0, 0, 0, .2);
-}
-
-.tt-suggestion {
-  padding: 3px 20px;
-  font-size: 12px;
-  line-height: 24px;
-}
-
-.empty-message {
-  padding: 5px 10px;
-  text-align: center;
+  margin: 0;
+  background: var(--ht-bg);
+  color: var(--ht-text);
+  line-height: 1.5;
 }
