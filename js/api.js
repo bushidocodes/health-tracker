@@ -4,15 +4,31 @@
 // results into the suggestion shape the UI expects, and caches per-query results
 // in memory.
 //
-// DEMO_KEY: 30 req/hour, 50 req/day per IP. Register for a higher limit at
-// https://fdc.nal.usda.gov/api-key-signup.html
+// The API key is resolved per request from js/config.js (personal key from the
+// Settings card, else the shared DEMO_KEY — 30 req/hour, 50 req/day per IP).
 
-const USDA_API_KEY = 'DEMO_KEY';
+import { getApiKey } from './config.js';
+
 const SEARCH_URL = 'https://api.nal.usda.gov/fdc/v1/foods/search';
 const PAGE_SIZE = 20;
 const ENERGY_NUTRIENT_ID = 1008; // kcal
 
 const cache = new Map();
+
+// Raised on an HTTP 429 so callers can surface the quota-specific guidance
+// rather than a generic failure.
+export class RateLimitError extends Error {
+  constructor() {
+    super('Daily USDA search limit reached. Add your own free API key in API Settings, or try again later.');
+    this.name = 'RateLimitError';
+    this.status = 429;
+  }
+}
+
+function errorFor(response) {
+  if (response.status === 429) return new RateLimitError();
+  return new Error(`USDA FoodData Central responded with ${response.status}`);
+}
 
 function transform(response) {
   return (response.foods || []).map((food) => {
@@ -34,10 +50,10 @@ export async function searchFoods(query) {
   if (!q) return [];
   if (cache.has(q)) return cache.get(q);
 
-  const url = `${SEARCH_URL}?query=${encodeURIComponent(q)}&api_key=${USDA_API_KEY}&pageSize=${PAGE_SIZE}`;
+  const url = `${SEARCH_URL}?query=${encodeURIComponent(q)}&api_key=${getApiKey()}&pageSize=${PAGE_SIZE}`;
   const response = await fetch(url);
   if (!response.ok) {
-    throw new Error(`USDA FoodData Central responded with ${response.status}`);
+    throw errorFor(response);
   }
   const data = await response.json();
   const suggestions = transform(data);
@@ -48,8 +64,8 @@ export async function searchFoods(query) {
 // ping() performs a cheap request to verify the API is reachable on startup,
 // mirroring the old Bloodhound initialize() health check.
 export async function ping() {
-  const url = `${SEARCH_URL}?query=apple&api_key=${USDA_API_KEY}&pageSize=1`;
+  const url = `${SEARCH_URL}?query=apple&api_key=${getApiKey()}&pageSize=1`;
   const response = await fetch(url);
-  if (!response.ok) throw new Error(`USDA FoodData Central responded with ${response.status}`);
+  if (!response.ok) throw errorFor(response);
   return true;
 }
