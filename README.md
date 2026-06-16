@@ -16,5 +16,16 @@ python -m http.server 8080   # or: npx http-server -p 8080
 
 ...and then open `http://localhost:8080` in your browser of choice
 
+## USDA API key
+
+Food search uses the USDA FoodData Central API. By default the app falls back to the public `DEMO_KEY`, which is rate-limited to **30 requests/hour and 50/day per IP address** — so on a shared or busy network the search can stop returning results until the quota resets.
+
+Register a free personal key at [fdc.nal.usda.gov/api-key-signup.html](https://fdc.nal.usda.gov/api-key-signup.html), then supply it either way:
+
+- **In the app**: open the *API Settings* card and paste your key (stored only in your browser's localStorage).
+- **Self-hosting**: define `window.HEALTH_TRACKER_USDA_API_KEY = '<your-key>'` before `js/main.js` loads in `index.html`.
+
+When the shared quota is exhausted, the app surfaces a "Daily USDA search limit reached" message rather than failing silently.
+
 ## Authors
 * Sean McBride - [bushidocodes](https://github.com/bushidocodes)

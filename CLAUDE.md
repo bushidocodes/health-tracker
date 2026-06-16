@@ -38,7 +38,8 @@ index.html  (loads css/style.css and js/main.js as a module)
     │   └── <ht-autocomplete> USDA typeahead (replaces typeahead.js + Bloodhound)
     ├── <ht-daily-totals>     total calories (replaces DailyTotalsCardView)
     ├── <ht-food-log>         per-meal tables + rows (replaces FoodLog{Card,Item}View)
-    └── <ht-export-import>    JSON backup / restore
+    ├── <ht-export-import>    JSON backup / restore
+    └── <ht-settings-card>    personal USDA API key entry
 ```
 
 ### Data Flow
@@ -65,7 +66,8 @@ js/
 ├── constants.js         MEAL_TIMES, IGNORED_KEYS, ENTER_KEY, camelize()
 ├── store.js             Store (EventTarget) + localStorage + legacy-format migration
 ├── store-controller.js  Lit ReactiveController bridging store events → host re-render
-├── api.js               searchFoods()/ping(): USDA fetch + transform + in-memory cache
+├── api.js               searchFoods()/ping(): USDA fetch + transform + in-memory cache; RateLimitError on 429
+├── config.js            USDA API key resolution (localStorage → window global → DEMO_KEY)
 ├── alerts.js            notify()/clearAlerts() helpers (dispatch document events)
 ├── styles.js            shared `css` tagged templates adopted across shadow roots
 ├── vendor/lit-core.min.js   vendored, self-contained Lit bundle (no external imports)
@@ -76,7 +78,8 @@ js/
     ├── ht-autocomplete.js   USDA typeahead
     ├── ht-daily-totals.js   calories aggregation
     ├── ht-food-log.js       meal-time tables + rows
-    └── ht-export-import.js  JSON backup / restore
+    ├── ht-export-import.js  JSON backup / restore
+    └── ht-settings-card.js  personal USDA API key entry
 css/style.css   light-DOM globals only: :root design tokens, reset, page background
 data/example_collection.json  example data for reference, not used by app
 index.html      minimal shell: <ht-app> + module script
@@ -103,7 +106,7 @@ index.html      minimal shell: <ht-app> + module script
 
 ### USDA FoodData Central API Integration
 
-`js/api.js` queries the search endpoint with the free `DEMO_KEY` (30 req/hour, 50 req/day per IP); the key is the `USDA_API_KEY` constant at the top of the file. Responses are transformed to extract: `brand_name` (from `brandOwner`/`brandName`), `item_name` (from `description`), `nf_calories` (from `foodNutrients` where `nutrientId === 1008`), `nf_serving_size_qty` (rounded to 1 decimal), and `nf_serving_size_unit`. Results are cached per query in a `Map`. `ping()` performs a startup health check; on failure `<ht-input-card>` shows an alert and disables submit.
+`js/api.js` queries the search endpoint with an API key resolved per request by `getApiKey()` in `js/config.js`. Resolution order: a personal key in `localStorage` (`health-tracker:usda-api-key`, set via `<ht-settings-card>`), else `window.HEALTH_TRACKER_USDA_API_KEY` (for self-hosters), else the shared `DEMO_KEY` (30 req/hour, 50 req/day **per IP** — so every visitor of a shared deployment competes for one quota). An HTTP 429 throws a `RateLimitError` (exported from `js/api.js`) whose message points users at the Settings card; the autocomplete surfaces it as a dismissible alert. Responses are transformed to extract: `brand_name` (from `brandOwner`/`brandName`), `item_name` (from `description`), `nf_calories` (from `foodNutrients` where `nutrientId === 1008`), `nf_serving_size_qty` (rounded to 1 decimal), and `nf_serving_size_unit`. Results are cached per query in a `Map`. `ping()` performs a startup health check (rerun on `ht:api-key-change`); on failure `<ht-input-card>` shows an alert and disables submit.
 
 ### Form Validation
 

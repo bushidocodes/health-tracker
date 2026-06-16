@@ -20,6 +20,9 @@ export class HtInputCard extends LitElement {
     .actions { margin-top: 0.5rem; }
   `];
 
+  // Bound so it can be added/removed as a document listener.
+  #onApiKeyChange = () => this.#healthCheck();
+
   constructor() {
     super();
     this._submitDisabled = false;
@@ -27,11 +30,24 @@ export class HtInputCard extends LitElement {
 
   connectedCallback() {
     super.connectedCallback();
-    // Health-check the API on load, mirroring the old Bloodhound initialize().
-    ping().catch(() => {
-      notify('USDA FoodData Central is not responding', 'danger');
-      this._submitDisabled = true;
-    });
+    // Health-check the API on load, mirroring the old Bloodhound initialize(),
+    // and again whenever the user changes the configured API key.
+    this.#healthCheck();
+    document.addEventListener('ht:api-key-change', this.#onApiKeyChange);
+  }
+
+  disconnectedCallback() {
+    super.disconnectedCallback();
+    document.removeEventListener('ht:api-key-change', this.#onApiKeyChange);
+  }
+
+  #healthCheck() {
+    ping()
+      .then(() => { this._submitDisabled = false; })
+      .catch((err) => {
+        notify(err?.message || 'USDA FoodData Central is not responding', 'danger');
+        this._submitDisabled = true;
+      });
   }
 
   get _autocomplete() {

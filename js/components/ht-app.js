@@ -11,6 +11,7 @@ import './ht-input-card.js';
 import './ht-daily-totals.js';
 import './ht-food-log.js';
 import './ht-export-import.js';
+import './ht-settings-card.js';
 
 export class HtApp extends LitElement {
   static styles = css`
@@ -56,6 +57,7 @@ export class HtApp extends LitElement {
           ${hasItems ? html`<ht-daily-totals></ht-daily-totals>` : null}
           ${hasItems ? html`<ht-food-log></ht-food-log>` : null}
           <ht-export-import></ht-export-import>
+          <ht-settings-card></ht-settings-card>
         </main>
         <footer>
           Written by <a href="https://github.com/bushidocodes">Sean McBride</a>
