@@ -9,10 +9,20 @@
 
 import { getApiKey } from './config.js';
 
+/**
+ * @typedef {Object} Suggestion
+ * @property {string} brand_name
+ * @property {string} item_name
+ * @property {string} nf_serving_size_unit
+ * @property {number} nf_serving_size_qty
+ * @property {number} nf_calories - kcal per serving
+ */
+
 const SEARCH_URL = 'https://api.nal.usda.gov/fdc/v1/foods/search';
 const PAGE_SIZE = 20;
 const ENERGY_NUTRIENT_ID = 1008; // kcal
 
+/** @type {Map<string, Suggestion[]>} */
 const cache = new Map();
 
 // Raised on an HTTP 429 so callers can surface the quota-specific guidance
@@ -21,15 +31,31 @@ export class RateLimitError extends Error {
   constructor() {
     super('Daily USDA search limit reached. Add your own free API key in API Settings, or try again later.');
     this.name = 'RateLimitError';
+    /** @type {number} */
     this.status = 429;
   }
 }
 
+/**
+ * @param {Response} response
+ * @returns {RateLimitError|Error}
+ */
 function errorFor(response) {
   if (response.status === 429) return new RateLimitError();
   return new Error(`USDA FoodData Central responded with ${response.status}`);
 }
 
+/**
+ * @param {{ foods?: Array<{
+ *   brandOwner?: string,
+ *   brandName?: string,
+ *   description?: string,
+ *   servingSizeUnit?: string,
+ *   servingSize?: number,
+ *   foodNutrients?: Array<{ nutrientId: number, value?: number }>
+ * }> }} response
+ * @returns {Suggestion[]}
+ */
 function transform(response) {
   return (response.foods || []).map((food) => {
     const energy = (food.foodNutrients || []).find((n) => n.nutrientId === ENERGY_NUTRIENT_ID);
@@ -43,8 +69,12 @@ function transform(response) {
   });
 }
 
-// searchFoods(query) resolves to an array of suggestion objects. Throws on
-// network / HTTP errors so the caller can surface the failure.
+/**
+ * Resolves to an array of suggestion objects. Throws on network / HTTP errors
+ * so the caller can surface the failure.
+ * @param {string} query
+ * @returns {Promise<Suggestion[]>}
+ */
 export async function searchFoods(query) {
   const q = query.trim();
   if (!q) return [];
@@ -61,8 +91,11 @@ export async function searchFoods(query) {
   return suggestions;
 }
 
-// ping() performs a cheap request to verify the API is reachable on startup,
-// mirroring the old Bloodhound initialize() health check.
+/**
+ * Performs a cheap request to verify the API is reachable on startup,
+ * mirroring the old Bloodhound initialize() health check.
+ * @returns {Promise<true>}
+ */
 export async function ping() {
   const url = `${SEARCH_URL}?query=apple&api_key=${getApiKey()}&pageSize=1`;
   const response = await fetch(url);

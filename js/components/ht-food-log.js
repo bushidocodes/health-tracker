@@ -9,6 +9,8 @@ import { store } from '../store.js';
 import { StoreController } from '../store-controller.js';
 import { MEAL_TIMES } from '../constants.js';
 
+/** @typedef {import('../store.js').FoodItem} FoodItem */
+
 export class HtFoodLog extends LitElement {
   static styles = [card, table, srOnly, css`
     section { margin-bottom: 1.5rem; }
@@ -29,6 +31,10 @@ export class HtFoodLog extends LitElement {
     new StoreController(this);
   }
 
+  /**
+   * @param {FoodItem} item
+   * @returns {string}
+   */
   #rowLabel(item) {
     return item.brandName ? `${item.brandName} ${item.itemName}` : item.itemName;
   }

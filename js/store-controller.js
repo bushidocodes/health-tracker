@@ -7,19 +7,32 @@
 
 import { store } from './store.js';
 
+/**
+ * @typedef {{ addController(c: StoreController): void, requestUpdate(): void }} ReactiveControllerHost
+ */
+
 export class StoreController {
+  /**
+   * @param {ReactiveControllerHost} host
+   * @param {{ events?: string[] }} [options]
+   */
   constructor(host, { events = ['add', 'remove'] } = {}) {
+    /** @type {ReactiveControllerHost} */
     this.host = host;
+    /** @type {string[]} */
     this.events = events;
     this.store = store;
+    /** @type {() => void} */
     this._onChange = () => this.host.requestUpdate();
     host.addController(this);
   }
 
+  /** @returns {void} */
   hostConnected() {
     for (const evt of this.events) this.store.addEventListener(evt, this._onChange);
   }
 
+  /** @returns {void} */
   hostDisconnected() {
     for (const evt of this.events) this.store.removeEventListener(evt, this._onChange);
   }

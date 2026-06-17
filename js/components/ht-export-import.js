@@ -13,6 +13,7 @@ export class HtExportImport extends LitElement {
     label.btn { margin: 0; }
   `];
 
+  /** @returns {void} */
   #export() {
     const data = JSON.stringify(store.toJSON(), null, 2);
     const blob = new Blob([data], { type: 'application/json' });
@@ -27,6 +28,7 @@ export class HtExportImport extends LitElement {
     URL.revokeObjectURL(url);
   }
 
+  /** @param {Event & { target: HTMLInputElement }} e */
   #import(e) {
     const file = e.target.files[0];
     if (!file) return;
