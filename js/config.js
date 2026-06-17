@@ -16,6 +16,7 @@
 export const DEMO_KEY = 'DEMO_KEY';
 const STORAGE_KEY = 'health-tracker:usda-api-key';
 
+/** @returns {string} */
 export function getApiKey() {
   try {
     const stored = localStorage.getItem(STORAGE_KEY);
@@ -29,8 +30,12 @@ export function getApiKey() {
   return DEMO_KEY;
 }
 
-// setApiKey(key) persists a personal key (or clears it when empty, reverting to
-// the DEMO_KEY fallback) and notifies listeners so the API health check can rerun.
+/**
+ * Persists a personal key (or clears it when empty, reverting to the DEMO_KEY
+ * fallback) and notifies listeners so the API health check can rerun.
+ * @param {string} key
+ * @returns {void}
+ */
 export function setApiKey(key) {
   const trimmed = (key || '').trim();
   try {
@@ -42,6 +47,7 @@ export function setApiKey(key) {
   document.dispatchEvent(new CustomEvent('ht:api-key-change'));
 }
 
+/** @returns {boolean} */
 export function isUsingDemoKey() {
   return getApiKey() === DEMO_KEY;
 }

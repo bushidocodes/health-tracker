@@ -5,6 +5,13 @@
 
 import { LitElement, html, css } from '../vendor/lit-core.min.js';
 
+/**
+ * @typedef {Object} AlertRecord
+ * @property {number} id
+ * @property {string} message
+ * @property {'warning'|'danger'|'success'} type
+ */
+
 let nextId = 0;
 
 export class HtAlerts extends LitElement {
@@ -41,10 +48,13 @@ export class HtAlerts extends LitElement {
 
   constructor() {
     super();
+    /** @type {AlertRecord[]} */
     this._alerts = [];
+    /** @type {(e: CustomEvent<{message: string, type: string}>) => void} */
     this._onAlert = (e) => {
       this._alerts = [...this._alerts, { id: nextId++, ...e.detail }];
     };
+    /** @type {() => void} */
     this._onClear = () => { this._alerts = []; };
   }
 
@@ -60,6 +70,10 @@ export class HtAlerts extends LitElement {
     super.disconnectedCallback();
   }
 
+  /**
+   * @param {number} id
+   * @returns {void}
+   */
   #dismiss(id) {
     this._alerts = this._alerts.filter((a) => a.id !== id);
   }

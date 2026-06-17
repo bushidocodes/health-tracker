@@ -4,8 +4,19 @@
 // EventTarget and emits 'add' / 'remove' CustomEvents (detail = the affected item)
 // so views can react to changes.
 
+/**
+ * @typedef {Object} FoodItem
+ * @property {string} id - UUID
+ * @property {string} brandName
+ * @property {string} itemName
+ * @property {number} amount - serving multiplier
+ * @property {string} time - one of MEAL_TIMES
+ * @property {number} calories - total kcal
+ */
+
 const STORAGE_KEY = 'health-tracker';
 
+/** @returns {string} */
 function uuid() {
   if (globalThis.crypto && typeof crypto.randomUUID === 'function') {
     return crypto.randomUUID();
@@ -18,6 +29,10 @@ function uuid() {
   });
 }
 
+/**
+ * @param {Partial<FoodItem> & Record<string, unknown>} rec
+ * @returns {FoodItem}
+ */
 function normalize(rec) {
   return {
     id: rec.id || uuid(),
@@ -30,14 +45,18 @@ function normalize(rec) {
 }
 
 class Store extends EventTarget {
+  /** @param {string} [key] */
   constructor(key = STORAGE_KEY) {
     super();
+    /** @type {string} */
     this.key = key;
+    /** @type {FoodItem[]} */
     this.items = [];
   }
 
   // load() reads the current day's items from localStorage, migrating from the
   // legacy Backbone.localStorage format if necessary.
+  /** @returns {FoodItem[]} */
   load() {
     const raw = localStorage.getItem(this.key);
     if (raw == null) {
@@ -63,6 +82,10 @@ class Store extends EventTarget {
 
   // Convert the old backbone.localStorage layout (index key = "id1,id2,..." plus
   // one "health-tracker-<id>" key per record) into the new single-array format.
+  /**
+   * @param {string} indexRaw
+   * @returns {FoodItem[]}
+   */
   #migrateLegacy(indexRaw) {
     const ids = String(indexRaw).split(',').map((s) => s.trim()).filter(Boolean);
     const items = [];
@@ -82,18 +105,25 @@ class Store extends EventTarget {
     return items;
   }
 
+  /** @returns {FoodItem[]} */
   all() {
     return this.items;
   }
 
+  /** @returns {number} */
   get length() {
     return this.items.length;
   }
 
+  /** @returns {number} */
   total() {
     return this.items.reduce((sum, item) => sum + (Number(item.calories) || 0), 0);
   }
 
+  /**
+   * @param {Omit<FoodItem, 'id'>} attrs
+   * @returns {FoodItem}
+   */
   create(attrs) {
     const item = normalize({ ...attrs, id: uuid() });
     this.items.push(item);
@@ -102,6 +132,10 @@ class Store extends EventTarget {
     return item;
   }
 
+  /**
+   * @param {string} id
+   * @returns {void}
+   */
   remove(id) {
     const index = this.items.findIndex((item) => item.id === id);
     if (index === -1) return;
@@ -111,10 +145,12 @@ class Store extends EventTarget {
   }
 
   // toJSON() returns plain records (without the internal id) suitable for export.
+  /** @returns {Omit<FoodItem, 'id'>[]} */
   toJSON() {
     return this.items.map(({ id, ...rest }) => rest);
   }
 
+  /** @returns {void} */
   #persist() {
     localStorage.setItem(this.key, JSON.stringify(this.items));
   }

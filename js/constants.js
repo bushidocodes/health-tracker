@@ -3,6 +3,7 @@
 export const ENTER_KEY = 13;
 export const TAB_KEY = 9;
 
+/** @type {string[]} */
 export const MEAL_TIMES = [
   'Breakfast',
   'Morning Snack',
@@ -13,9 +14,14 @@ export const MEAL_TIMES = [
 ];
 
 // Navigation, modifier, and function keyCodes that should not clear the typeahead buffer.
+/** @type {number[]} */
 export const IGNORED_KEYS = [9, 13, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 91, 92, 93];
 
-// camelize('Morning Snack') === 'morningSnack'
+/**
+ * camelize('Morning Snack') === 'morningSnack'
+ * @param {string} str
+ * @returns {string}
+ */
 export function camelize(str) {
   return str.replace(/(?:^\w|[A-Z]|\b\w|\s+)/g, (match, index) => {
     if (+match === 0) return '';

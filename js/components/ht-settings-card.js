@@ -25,9 +25,11 @@ export class HtSettingsCard extends LitElement {
 
   constructor() {
     super();
+    /** @type {boolean} */
     this._custom = !isUsingDemoKey();
   }
 
+  /** @returns {HTMLInputElement|null} */
   get _input() {
     return this.renderRoot.querySelector('#apiKeyInput');
   }
@@ -65,6 +67,7 @@ export class HtSettingsCard extends LitElement {
     `;
   }
 
+  /** @param {KeyboardEvent} e */
   #onKeydown(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -72,10 +75,11 @@ export class HtSettingsCard extends LitElement {
     }
   }
 
+  /** @returns {void} */
   #save() {
     const value = this._input.value.trim();
     if (!value) {
-      notify('Enter an API key, or use “Use DEMO_KEY” to revert to the shared key.', 'warning');
+      notify('Enter an API key, or use "Use DEMO_KEY" to revert to the shared key.', 'warning');
       return;
     }
     setApiKey(value);
@@ -84,6 +88,7 @@ export class HtSettingsCard extends LitElement {
     notify('Saved your personal USDA API key.', 'success');
   }
 
+  /** @returns {void} */
   #clear() {
     setApiKey('');
     this._custom = false;

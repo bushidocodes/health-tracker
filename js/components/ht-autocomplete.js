@@ -9,6 +9,8 @@ import { LitElement, html, css } from '../vendor/lit-core.min.js';
 import { form } from '../styles.js';
 import { searchFoods } from '../api.js';
 
+/** @typedef {import('../api.js').Suggestion} Suggestion */
+
 const DEBOUNCE_MS = 300;
 
 export class HtAutocomplete extends LitElement {
@@ -63,26 +65,37 @@ export class HtAutocomplete extends LitElement {
 
   constructor() {
     super();
+    /** @type {string} */
     this.label = '';
+    /** @type {Suggestion|null} */
     this.selected = null;
+    /** @type {Suggestion[]} */
     this._suggestions = [];
+    /** @type {number} */
     this._activeIndex = -1;
+    /** @type {boolean} */
     this._open = false;
+    /** @type {boolean} */
     this._loading = false;
+    /** @type {number|null} */
     this._debounceTimer = null;
+    /** @type {number} - monotonically increasing request counter for cancellation */
     this._reqId = 0;
   }
 
+  /** @returns {HTMLInputElement|undefined} */
   renderHTMLInput() {
     return this.renderRoot?.querySelector('input');
   }
 
   // Public API ---------------------------------------------------------------
 
+  /** @returns {void} */
   focusInput() {
     this.renderHTMLInput()?.focus();
   }
 
+  /** @returns {void} */
   clear() {
     this.selected = null;
     this._suggestions = [];
@@ -145,6 +158,7 @@ export class HtAutocomplete extends LitElement {
 
   // Events -------------------------------------------------------------------
 
+  /** @param {InputEvent & { target: HTMLInputElement }} e */
   #onInput(e) {
     const value = e.target.value;
     // Editing the field invalidates any previously selected suggestion.
@@ -160,6 +174,7 @@ export class HtAutocomplete extends LitElement {
     this._debounceTimer = setTimeout(() => this.#search(value), DEBOUNCE_MS);
   }
 
+  /** @param {string} query */
   async #search(query) {
     const reqId = ++this._reqId;
     this._loading = true;
@@ -183,6 +198,7 @@ export class HtAutocomplete extends LitElement {
     }
   }
 
+  /** @param {KeyboardEvent} e */
   #onKeydown(e) {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
@@ -203,11 +219,16 @@ export class HtAutocomplete extends LitElement {
     }
   }
 
+  /** @returns {void} */
   #onBlur() {
     // Delay so a suggestion mousedown can complete before the menu closes.
     setTimeout(() => { this._open = false; }, 100);
   }
 
+  /**
+   * @param {Suggestion} datum
+   * @returns {void}
+   */
   #select(datum) {
     this.selected = datum;
     const input = this.renderHTMLInput();
@@ -222,6 +243,10 @@ export class HtAutocomplete extends LitElement {
     }));
   }
 
+  /**
+   * @param {Suggestion} d
+   * @returns {string}
+   */
   #displayText(d) {
     const brand = d.brand_name ? `${d.brand_name} ` : '';
     return `${brand}${d.item_name} – ${d.nf_serving_size_qty} ${d.nf_serving_size_unit}`;

@@ -11,6 +11,8 @@ import { notify, clearAlerts } from '../alerts.js';
 import { ping } from '../api.js';
 import './ht-autocomplete.js';
 
+/** @typedef {import('./ht-autocomplete.js').HtAutocomplete} HtAutocomplete */
+
 export class HtInputCard extends LitElement {
   static properties = {
     _submitDisabled: { state: true },
@@ -25,6 +27,7 @@ export class HtInputCard extends LitElement {
 
   constructor() {
     super();
+    /** @type {boolean} */
     this._submitDisabled = false;
   }
 
@@ -41,6 +44,7 @@ export class HtInputCard extends LitElement {
     document.removeEventListener('ht:api-key-change', this.#onApiKeyChange);
   }
 
+  /** @returns {void} */
   #healthCheck() {
     ping()
       .then(() => { this._submitDisabled = false; })
@@ -50,14 +54,17 @@ export class HtInputCard extends LitElement {
       });
   }
 
+  /** @returns {HtAutocomplete|null} */
   get _autocomplete() {
     return this.renderRoot.querySelector('ht-autocomplete');
   }
 
+  /** @returns {HTMLInputElement|null} */
   get _amount() {
     return this.renderRoot.querySelector('#inputAmount');
   }
 
+  /** @returns {HTMLSelectElement|null} */
   get _time() {
     return this.renderRoot.querySelector('#inputTime');
   }
@@ -96,15 +103,18 @@ export class HtInputCard extends LitElement {
     `;
   }
 
+  /** @returns {void} */
   #onSelect() {
     // A suggestion was chosen; move focus to the amount field.
     this._amount?.focus();
   }
 
+  /** @param {CustomEvent<string>} e */
   #onError(e) {
     notify(e.detail || 'USDA FoodData Central is not responding', 'danger');
   }
 
+  /** @param {KeyboardEvent} e */
   #submitOnEnter(e) {
     if (e.key === 'Enter') {
       e.preventDefault();
@@ -112,6 +122,7 @@ export class HtInputCard extends LitElement {
     }
   }
 
+  /** @returns {void} */
   #createFoodItem() {
     clearAlerts();
 
