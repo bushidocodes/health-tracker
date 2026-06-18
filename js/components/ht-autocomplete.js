@@ -83,9 +83,9 @@ export class HtAutocomplete extends LitElement {
     this._reqId = 0;
   }
 
-  /** @returns {HTMLInputElement|undefined} */
+  /** @returns {HTMLInputElement|null} */
   renderHTMLInput() {
-    return this.renderRoot?.querySelector('input');
+    return this.renderRoot?.querySelector('input') ?? null;
   }
 
   // Public API ---------------------------------------------------------------
