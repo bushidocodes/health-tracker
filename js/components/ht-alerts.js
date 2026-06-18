@@ -52,7 +52,8 @@ export class HtAlerts extends LitElement {
     this._alerts = [];
     /** @type {(e: CustomEvent<{message: string, type: string}>) => void} */
     this._onAlert = (e) => {
-      this._alerts = [...this._alerts, { id: nextId++, ...e.detail }];
+      const { message, type } = e.detail;
+      this._alerts = [...this._alerts, { id: nextId++, message, type: /** @type {AlertRecord['type']} */ (type) }];
     };
     /** @type {() => void} */
     this._onClear = () => { this._alerts = []; };

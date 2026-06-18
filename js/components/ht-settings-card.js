@@ -29,9 +29,9 @@ export class HtSettingsCard extends LitElement {
     this._custom = !isUsingDemoKey();
   }
 
-  /** @returns {HTMLInputElement|null} */
+  /** @returns {HTMLInputElement} */
   get _input() {
-    return this.renderRoot.querySelector('#apiKeyInput');
+    return /** @type {HTMLInputElement} */ (this.renderRoot.querySelector('#apiKeyInput'));
   }
 
   render() {

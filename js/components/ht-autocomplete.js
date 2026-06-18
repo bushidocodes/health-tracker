@@ -77,8 +77,8 @@ export class HtAutocomplete extends LitElement {
     this._open = false;
     /** @type {boolean} */
     this._loading = false;
-    /** @type {number|null} */
-    this._debounceTimer = null;
+    /** @type {number|undefined} */
+    this._debounceTimer = undefined;
     /** @type {number} - monotonically increasing request counter for cancellation */
     this._reqId = 0;
   }
@@ -144,7 +144,7 @@ export class HtAutocomplete extends LitElement {
               class="suggestion ${i === this._activeIndex ? 'active' : ''}"
               role="option"
               aria-selected=${i === this._activeIndex ? 'true' : 'false'}
-              @mousedown=${(e) => { e.preventDefault(); this.#select(s); }}
+              @mousedown=${(/** @type {MouseEvent} */ e) => { e.preventDefault(); this.#select(s); }}
               @mouseenter=${() => { this._activeIndex = i; }}
             >
               <strong>${label}</strong>
@@ -189,7 +189,7 @@ export class HtAutocomplete extends LitElement {
       if (reqId !== this._reqId) return;
       this._open = false;
       this.dispatchEvent(new CustomEvent('ht:error', {
-        detail: err.message || 'USDA FoodData Central is not responding',
+        detail: /** @type {any} */ (err)?.message || 'USDA FoodData Central is not responding',
         bubbles: true,
         composed: true,
       }));

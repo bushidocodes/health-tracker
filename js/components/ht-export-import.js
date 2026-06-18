@@ -30,12 +30,12 @@ export class HtExportImport extends LitElement {
 
   /** @param {Event & { target: HTMLInputElement }} e */
   #import(e) {
-    const file = e.target.files[0];
+    const file = e.target.files?.[0];
     if (!file) return;
     const reader = new FileReader();
     reader.onload = (evt) => {
       try {
-        const items = JSON.parse(evt.target.result);
+        const items = JSON.parse(/** @type {string} */ (evt.target?.result));
         if (!Array.isArray(items)) throw new Error('Expected a JSON array');
         let imported = 0;
         for (const item of items) {
@@ -52,7 +52,7 @@ export class HtExportImport extends LitElement {
         }
         notify(`Imported ${imported} food item(s).`, 'success');
       } catch (err) {
-        notify(`Import failed: ${err.message}`, 'danger');
+        notify(`Import failed: ${/** @type {any} */ (err)?.message}`, 'danger');
       }
       e.target.value = '';
     };
