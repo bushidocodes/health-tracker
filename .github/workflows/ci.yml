@@ -13,7 +13,7 @@ jobs:
           node-version: '20'
 
       - name: Install dev dependencies
-        run: npm init -y && npm install --save-dev eslint @eslint/js typescript html-validate
+        run: npm init -y && npm install --save-dev eslint @eslint/js globals typescript html-validate
 
       - name: ESLint
         run: npx eslint js/
