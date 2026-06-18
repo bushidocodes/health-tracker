@@ -54,19 +54,19 @@ export class HtInputCard extends LitElement {
       });
   }
 
-  /** @returns {HtAutocomplete|null} */
+  /** @returns {HtAutocomplete} */
   get _autocomplete() {
-    return this.renderRoot.querySelector('ht-autocomplete');
+    return /** @type {HtAutocomplete} */ (this.renderRoot.querySelector('ht-autocomplete'));
   }
 
-  /** @returns {HTMLInputElement|null} */
+  /** @returns {HTMLInputElement} */
   get _amount() {
-    return this.renderRoot.querySelector('#inputAmount');
+    return /** @type {HTMLInputElement} */ (this.renderRoot.querySelector('#inputAmount'));
   }
 
-  /** @returns {HTMLSelectElement|null} */
+  /** @returns {HTMLSelectElement} */
   get _time() {
-    return this.renderRoot.querySelector('#inputTime');
+    return /** @type {HTMLSelectElement} */ (this.renderRoot.querySelector('#inputTime'));
   }
 
   render() {

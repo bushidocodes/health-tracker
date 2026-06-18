@@ -5,7 +5,7 @@
 import { LitElement, html, css } from '../vendor/lit-core.min.js';
 import { card, form, button } from '../styles.js';
 import { notify } from '../alerts.js';
-import { getApiKey, setApiKey, isUsingDemoKey } from '../config.js';
+import { setApiKey, isUsingDemoKey } from '../config.js';
 
 export class HtSettingsCard extends LitElement {
   static properties = {
@@ -29,9 +29,9 @@ export class HtSettingsCard extends LitElement {
     this._custom = !isUsingDemoKey();
   }
 
-  /** @returns {HTMLInputElement|null} */
+  /** @returns {HTMLInputElement} */
   get _input() {
-    return this.renderRoot.querySelector('#apiKeyInput');
+    return /** @type {HTMLInputElement} */ (this.renderRoot.querySelector('#apiKeyInput'));
   }
 
   render() {

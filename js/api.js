@@ -78,7 +78,7 @@ function transform(response) {
 export async function searchFoods(query) {
   const q = query.trim();
   if (!q) return [];
-  if (cache.has(q)) return cache.get(q);
+  if (cache.has(q)) return cache.get(q) ?? [];
 
   const url = `${SEARCH_URL}?query=${encodeURIComponent(q)}&api_key=${getApiKey()}&pageSize=${PAGE_SIZE}`;
   const response = await fetch(url);

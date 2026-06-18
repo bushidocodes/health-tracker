@@ -1,0 +1,33 @@
+name: CI
+on: [push, pull_request]
+
+jobs:
+  lint-and-typecheck:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dev dependencies
+        run: npm init -y && npm install --save-dev eslint @eslint/js globals typescript html-validate
+
+      - name: ESLint
+        run: npx eslint js/
+
+      - name: TypeScript check via JSDoc annotations
+        run: npx tsc
+
+      - name: HTML validation
+        run: npx html-validate index.html
+
+      - name: Check for hardcoded API keys
+        run: |
+          # Fail if anything that looks like a real key (not DEMO_KEY) is present
+          if grep -rE '"[A-Za-z0-9]{30,}"' js/config.js js/api.js | grep -v 'DEMO_KEY'; then
+            echo "Potential hardcoded API key found — review before merging"
+            exit 1
+          fi
