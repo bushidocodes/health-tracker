@@ -38,9 +38,9 @@ function normalize(rec) {
     id: rec.id || uuid(),
     brandName: rec.brandName || '',
     itemName: rec.itemName || '',
-    amount: typeof rec.amount === 'number' ? rec.amount : parseFloat(rec.amount) || 0,
+    amount: typeof rec.amount === 'number' ? rec.amount : Number(rec.amount) || 0,
     time: rec.time || '',
-    calories: typeof rec.calories === 'number' ? rec.calories : parseInt(rec.calories, 10) || 0,
+    calories: typeof rec.calories === 'number' ? rec.calories : Math.trunc(Number(rec.calories)) || 0,
   };
 }
 
