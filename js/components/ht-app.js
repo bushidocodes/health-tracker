@@ -3,9 +3,9 @@
 // Replaces AppView: renders the header/footer, the alert region, and the cards,
 // showing the totals and food-log cards only once at least one item is logged.
 
-import { LitElement, html, css } from '../vendor/lit-core.min.js';
 import { store } from '../store.js';
 import { StoreController } from '../store-controller.js';
+import { css, html, LitElement } from '../vendor/lit-core.min.js';
 import './ht-alerts.js';
 import './ht-input-card.js';
 import './ht-daily-totals.js';

@@ -29,7 +29,9 @@ const cache = new Map();
 // rather than a generic failure.
 export class RateLimitError extends Error {
   constructor() {
-    super('Daily USDA search limit reached. Add your own free API key in API Settings, or try again later.');
+    super(
+      'Daily USDA search limit reached. Add your own free API key in API Settings, or try again later.'
+    );
     this.name = 'RateLimitError';
     /** @type {number} */
     this.status = 429;
@@ -58,13 +60,17 @@ function errorFor(response) {
  */
 function transform(response) {
   return (response.foods || []).map((food) => {
-    const energy = (food.foodNutrients || []).find((n) => n.nutrientId === ENERGY_NUTRIENT_ID);
+    const energy = (food.foodNutrients || []).find(
+      (n) => n.nutrientId === ENERGY_NUTRIENT_ID
+    );
     return {
       brand_name: food.brandOwner || food.brandName || '',
       item_name: food.description || '',
       nf_serving_size_unit: food.servingSizeUnit || 'serving',
-      nf_serving_size_qty: food.servingSize ? Math.round(food.servingSize * 10) / 10 : 1,
-      nf_calories: energy ? energy.value ?? 0 : 0,
+      nf_serving_size_qty: food.servingSize
+        ? Math.round(food.servingSize * 10) / 10
+        : 1,
+      nf_calories: energy ? (energy.value ?? 0) : 0,
     };
   });
 }

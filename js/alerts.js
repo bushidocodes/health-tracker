@@ -8,7 +8,9 @@
  * @returns {void}
  */
 export function notify(message, type = 'warning') {
-  document.dispatchEvent(new CustomEvent('ht:alert', { detail: { message, type } }));
+  document.dispatchEvent(
+    new CustomEvent('ht:alert', { detail: { message, type } })
+  );
 }
 
 /** @returns {void} */

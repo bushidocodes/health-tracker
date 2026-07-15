@@ -5,9 +5,9 @@
 // supports keyboard (Up/Down/Enter/Esc) and mouse selection, and exposes the
 // chosen datum via the `selected` property and a composed `ht:select` event.
 
-import { LitElement, html, css } from '../vendor/lit-core.min.js';
-import { form } from '../styles.js';
 import { searchFoods } from '../api.js';
+import { form } from '../styles.js';
+import { css, html, LitElement } from '../vendor/lit-core.min.js';
 
 /** @typedef {import('../api.js').Suggestion} Suggestion */
 
@@ -108,7 +108,9 @@ export class HtAutocomplete extends LitElement {
   // Rendering ----------------------------------------------------------------
 
   render() {
-    const showMenu = this._open && (this._suggestions.length > 0 || this._lastQueryEmpty === false);
+    const showMenu =
+      this._open &&
+      (this._suggestions.length > 0 || this._lastQueryEmpty === false);
     return html`
       <fieldset class="field">
         <label for="acInput">${this.label}</label>
@@ -138,14 +140,21 @@ export class HtAutocomplete extends LitElement {
     return html`
       <div class="menu" role="listbox">
         ${this._suggestions.map((s, i) => {
-          const label = s.brand_name ? `${s.brand_name} ${s.item_name}` : s.item_name;
+          const label = s.brand_name
+            ? `${s.brand_name} ${s.item_name}`
+            : s.item_name;
           return html`
             <div
               class="suggestion ${i === this._activeIndex ? 'active' : ''}"
               role="option"
               aria-selected=${i === this._activeIndex ? 'true' : 'false'}
-              @mousedown=${(/** @type {MouseEvent} */ e) => { e.preventDefault(); this.#select(s); }}
-              @mouseenter=${() => { this._activeIndex = i; }}
+              @mousedown=${(/** @type {MouseEvent} */ e) => {
+                e.preventDefault();
+                this.#select(s);
+              }}
+              @mouseenter=${() => {
+                this._activeIndex = i;
+              }}
             >
               <strong>${label}</strong>
               <span class="qty"> – ${s.nf_serving_size_qty} ${s.nf_serving_size_unit}</span>
@@ -188,11 +197,15 @@ export class HtAutocomplete extends LitElement {
     } catch (err) {
       if (reqId !== this._reqId) return;
       this._open = false;
-      this.dispatchEvent(new CustomEvent('ht:error', {
-        detail: /** @type {any} */ (err)?.message || 'USDA FoodData Central is not responding',
-        bubbles: true,
-        composed: true,
-      }));
+      this.dispatchEvent(
+        new CustomEvent('ht:error', {
+          detail:
+            /** @type {any} */ (err)?.message ||
+            'USDA FoodData Central is not responding',
+          bubbles: true,
+          composed: true,
+        })
+      );
     } finally {
       if (reqId === this._reqId) this._loading = false;
     }
@@ -203,7 +216,10 @@ export class HtAutocomplete extends LitElement {
     if (e.key === 'ArrowDown') {
       e.preventDefault();
       if (!this._open && this._suggestions.length) this._open = true;
-      this._activeIndex = Math.min(this._activeIndex + 1, this._suggestions.length - 1);
+      this._activeIndex = Math.min(
+        this._activeIndex + 1,
+        this._suggestions.length - 1
+      );
     } else if (e.key === 'ArrowUp') {
       e.preventDefault();
       this._activeIndex = Math.max(this._activeIndex - 1, 0);
@@ -222,7 +238,9 @@ export class HtAutocomplete extends LitElement {
   /** @returns {void} */
   #onBlur() {
     // Delay so a suggestion mousedown can complete before the menu closes.
-    setTimeout(() => { this._open = false; }, 100);
+    setTimeout(() => {
+      this._open = false;
+    }, 100);
   }
 
   /**
@@ -236,11 +254,13 @@ export class HtAutocomplete extends LitElement {
     this._open = false;
     this._suggestions = [];
     this._activeIndex = -1;
-    this.dispatchEvent(new CustomEvent('ht:select', {
-      detail: datum,
-      bubbles: true,
-      composed: true,
-    }));
+    this.dispatchEvent(
+      new CustomEvent('ht:select', {
+        detail: datum,
+        bubbles: true,
+        composed: true,
+      })
+    );
   }
 
   /**

@@ -3,7 +3,7 @@
 // Listens for `ht:alert` (push) and `ht:alert-clear` (dismiss all) events on
 // document, dispatched via the helpers in alerts.js.
 
-import { LitElement, html, css } from '../vendor/lit-core.min.js';
+import { css, html, LitElement } from '../vendor/lit-core.min.js';
 
 /**
  * @typedef {Object} AlertRecord
@@ -53,10 +53,19 @@ export class HtAlerts extends LitElement {
     /** @type {(e: CustomEvent<{message: string, type: string}>) => void} */
     this._onAlert = (e) => {
       const { message, type } = e.detail;
-      this._alerts = [...this._alerts, { id: nextId++, message, type: /** @type {AlertRecord['type']} */ (type) }];
+      this._alerts = [
+        ...this._alerts,
+        {
+          id: nextId++,
+          message,
+          type: /** @type {AlertRecord['type']} */ (type),
+        },
+      ];
     };
     /** @type {() => void} */
-    this._onClear = () => { this._alerts = []; };
+    this._onClear = () => {
+      this._alerts = [];
+    };
   }
 
   connectedCallback() {
@@ -81,12 +90,14 @@ export class HtAlerts extends LitElement {
 
   render() {
     return html`
-      ${this._alerts.map((a) => html`
+      ${this._alerts.map(
+        (a) => html`
         <div class="alert alert-${a.type}" role="alert">
           ${a.message}
           <button class="close" aria-label="Close" @click=${() => this.#dismiss(a.id)}>&times;</button>
         </div>
-      `)}
+      `
+      )}
     `;
   }
 }
