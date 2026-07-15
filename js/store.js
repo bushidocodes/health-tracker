@@ -38,9 +38,13 @@ function normalize(rec) {
     id: rec.id || uuid(),
     brandName: rec.brandName || '',
     itemName: rec.itemName || '',
-    amount: typeof rec.amount === 'number' ? rec.amount : Number(rec.amount) || 0,
+    amount:
+      typeof rec.amount === 'number' ? rec.amount : Number(rec.amount) || 0,
     time: rec.time || '',
-    calories: typeof rec.calories === 'number' ? rec.calories : Math.trunc(Number(rec.calories)) || 0,
+    calories:
+      typeof rec.calories === 'number'
+        ? rec.calories
+        : Math.trunc(Number(rec.calories)) || 0,
   };
 }
 
@@ -87,7 +91,10 @@ class Store extends EventTarget {
    * @returns {FoodItem[]}
    */
   #migrateLegacy(indexRaw) {
-    const ids = String(indexRaw).split(',').map((s) => s.trim()).filter(Boolean);
+    const ids = String(indexRaw)
+      .split(',')
+      .map((s) => s.trim())
+      .filter(Boolean);
     const items = [];
     for (const id of ids) {
       const recRaw = localStorage.getItem(`${this.key}-${id}`);
@@ -117,7 +124,10 @@ class Store extends EventTarget {
 
   /** @returns {number} */
   total() {
-    return this.items.reduce((sum, item) => sum + (Number(item.calories) || 0), 0);
+    return this.items.reduce(
+      (sum, item) => sum + (Number(item.calories) || 0),
+      0
+    );
   }
 
   /**

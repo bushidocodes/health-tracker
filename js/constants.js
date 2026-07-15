@@ -15,7 +15,9 @@ export const MEAL_TIMES = [
 
 // Navigation, modifier, and function keyCodes that should not clear the typeahead buffer.
 /** @type {number[]} */
-export const IGNORED_KEYS = [9, 13, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 91, 92, 93];
+export const IGNORED_KEYS = [
+  9, 13, 16, 17, 18, 19, 20, 27, 33, 34, 35, 36, 37, 38, 39, 40, 91, 92, 93,
+];
 
 /**
  * camelize('Morning Snack') === 'morningSnack'

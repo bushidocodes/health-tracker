@@ -29,11 +29,13 @@ export class StoreController {
 
   /** @returns {void} */
   hostConnected() {
-    for (const evt of this.events) this.store.addEventListener(evt, this._onChange);
+    for (const evt of this.events)
+      this.store.addEventListener(evt, this._onChange);
   }
 
   /** @returns {void} */
   hostDisconnected() {
-    for (const evt of this.events) this.store.removeEventListener(evt, this._onChange);
+    for (const evt of this.events)
+      this.store.removeEventListener(evt, this._onChange);
   }
 }

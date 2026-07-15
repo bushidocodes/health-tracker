@@ -14,18 +14,19 @@ jobs:
         uses: actions/setup-node@v6
         with:
           node-version: '20'
+          cache: npm
 
       - name: Install dev dependencies
-        run: npm init -y && npm install --save-dev eslint @eslint/js globals typescript html-validate
+        run: npm ci
 
-      - name: ESLint
-        run: npx eslint js/
+      - name: Lint (Biome)
+        run: npm run lint
 
       - name: TypeScript check via JSDoc annotations
-        run: npx tsc
+        run: npm run typecheck
 
       - name: HTML validation
-        run: npx html-validate index.html
+        run: npm run validate:html
 
       - name: Check for hardcoded API keys
         run: |

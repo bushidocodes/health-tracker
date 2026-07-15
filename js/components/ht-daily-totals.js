@@ -1,10 +1,10 @@
 // <ht-daily-totals> shows aggregate calories for the day.
 // Replaces DailyTotalsCardView.
 
-import { LitElement, html } from '../vendor/lit-core.min.js';
-import { card } from '../styles.js';
 import { store } from '../store.js';
 import { StoreController } from '../store-controller.js';
+import { card } from '../styles.js';
+import { html, LitElement } from '../vendor/lit-core.min.js';
 
 export class HtDailyTotals extends LitElement {
   static styles = [card];

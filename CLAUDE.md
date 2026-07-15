@@ -16,7 +16,16 @@ Health Tracker is a web application for logging daily food intake and calculatin
 
 ## Running the App
 
-There are no build, lint, or test commands. The app is static files, but **it must be served over HTTP** — ES modules and `fetch` do not work from a `file://` URL.
+There is **no app bundler or runtime npm install** — the browser loads ES modules and vendored Lit as static files. Dev tooling (Biome lint/format, `tsc` for JSDoc typecheck, html-validate) lives in `package.json` for CI and local checks:
+
+```bash
+npm install
+npm run lint
+npm run typecheck
+npm run validate:html
+```
+
+The app **must be served over HTTP** — ES modules and `fetch` do not work from a `file://` URL.
 
 1. Start any static server from the repo root, e.g. `python -m http.server 8080` or `npx http-server -p 8080`
 2. Open `http://localhost:8080`

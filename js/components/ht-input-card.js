@@ -3,12 +3,12 @@
 // Replaces InputFoodCardView: hosts the typeahead, validates input, and creates
 // new food items in the store.
 
-import { LitElement, html, css } from '../vendor/lit-core.min.js';
-import { card, form, button } from '../styles.js';
-import { store } from '../store.js';
-import { MEAL_TIMES } from '../constants.js';
-import { notify, clearAlerts } from '../alerts.js';
+import { clearAlerts, notify } from '../alerts.js';
 import { ping } from '../api.js';
+import { MEAL_TIMES } from '../constants.js';
+import { store } from '../store.js';
+import { button, card, form } from '../styles.js';
+import { css, html, LitElement } from '../vendor/lit-core.min.js';
 import './ht-autocomplete.js';
 
 /** @typedef {import('./ht-autocomplete.js').HtAutocomplete} HtAutocomplete */
@@ -18,9 +18,14 @@ export class HtInputCard extends LitElement {
     _submitDisabled: { state: true },
   };
 
-  static styles = [card, form, button, css`
+  static styles = [
+    card,
+    form,
+    button,
+    css`
     .actions { margin-top: 0.5rem; }
-  `];
+  `,
+  ];
 
   // Bound so it can be added/removed as a document listener.
   #onApiKeyChange = () => this.#healthCheck();
@@ -47,26 +52,37 @@ export class HtInputCard extends LitElement {
   /** @returns {void} */
   #healthCheck() {
     ping()
-      .then(() => { this._submitDisabled = false; })
+      .then(() => {
+        this._submitDisabled = false;
+      })
       .catch((err) => {
-        notify(err?.message || 'USDA FoodData Central is not responding', 'danger');
+        notify(
+          err?.message || 'USDA FoodData Central is not responding',
+          'danger'
+        );
         this._submitDisabled = true;
       });
   }
 
   /** @returns {HtAutocomplete} */
   get _autocomplete() {
-    return /** @type {HtAutocomplete} */ (this.renderRoot.querySelector('ht-autocomplete'));
+    return /** @type {HtAutocomplete} */ (
+      this.renderRoot.querySelector('ht-autocomplete')
+    );
   }
 
   /** @returns {HTMLInputElement} */
   get _amount() {
-    return /** @type {HTMLInputElement} */ (this.renderRoot.querySelector('#inputAmount'));
+    return /** @type {HTMLInputElement} */ (
+      this.renderRoot.querySelector('#inputAmount')
+    );
   }
 
   /** @returns {HTMLSelectElement} */
   get _time() {
-    return /** @type {HTMLSelectElement} */ (this.renderRoot.querySelector('#inputTime'));
+    return /** @type {HTMLSelectElement} */ (
+      this.renderRoot.querySelector('#inputTime')
+    );
   }
 
   render() {
@@ -129,12 +145,14 @@ export class HtInputCard extends LitElement {
     const selected = this._autocomplete?.selected || null;
     const amountStr = this._amount.value.trim();
     const amountNum = Number(amountStr);
-    const amountValid = amountStr !== '' && Number.isFinite(amountNum) && amountNum > 0;
+    const amountValid =
+      amountStr !== '' && Number.isFinite(amountNum) && amountNum > 0;
 
     if (!selected || !amountValid) {
       let msg;
       if (!selected && !amountValid) {
-        msg = 'Food Item has not been selected from the search and amount field is not a positive number. Correct to resubmit';
+        msg =
+          'Food Item has not been selected from the search and amount field is not a positive number. Correct to resubmit';
         this._autocomplete?.focusInput();
       } else if (!selected) {
         msg = 'Food Item has not been selected. Select to Continue';

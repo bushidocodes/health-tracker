@@ -1,17 +1,22 @@
 // <ht-export-import> downloads the day's log as JSON and restores from a JSON file.
 // Replaces ExportImportView.
 
-import { LitElement, html, css } from '../vendor/lit-core.min.js';
-import { card, button, srOnly } from '../styles.js';
-import { store } from '../store.js';
-import { MEAL_TIMES } from '../constants.js';
 import { notify } from '../alerts.js';
+import { MEAL_TIMES } from '../constants.js';
+import { store } from '../store.js';
+import { button, card, srOnly } from '../styles.js';
+import { css, html, LitElement } from '../vendor/lit-core.min.js';
 
 export class HtExportImport extends LitElement {
-  static styles = [card, button, srOnly, css`
+  static styles = [
+    card,
+    button,
+    srOnly,
+    css`
     .row { display: flex; align-items: center; flex-wrap: wrap; gap: 0.5rem; }
     label.btn { margin: 0; }
-  `];
+  `,
+  ];
 
   /** @returns {void} */
   #export() {
@@ -40,13 +45,21 @@ export class HtExportImport extends LitElement {
         let imported = 0;
         for (const item of items) {
           if (!item.itemName) continue; // skip entries with no food name
-          const time = MEAL_TIMES.includes(item.time) ? item.time : MEAL_TIMES[0];
+          const time = MEAL_TIMES.includes(item.time)
+            ? item.time
+            : MEAL_TIMES[0];
           store.create({
             brandName: item.brandName || '',
             itemName: item.itemName,
-            amount: typeof item.amount === 'number' ? item.amount : parseFloat(item.amount) || 0,
+            amount:
+              typeof item.amount === 'number'
+                ? item.amount
+                : parseFloat(item.amount) || 0,
             time,
-            calories: typeof item.calories === 'number' ? item.calories : parseInt(item.calories, 10) || 0,
+            calories:
+              typeof item.calories === 'number'
+                ? item.calories
+                : parseInt(item.calories, 10) || 0,
           });
           imported++;
         }
