@@ -1,6 +1,7 @@
 {
   "name": "health-tracker",
   "version": "1.0.0",
+  "packageManager": "npm@10.9.2",
   "private": true,
   "description": "Browser food-log tracker using USDA FoodData Central (static ES modules, no bundler).",
   "type": "module",
